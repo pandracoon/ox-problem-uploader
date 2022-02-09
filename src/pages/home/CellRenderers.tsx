@@ -128,8 +128,8 @@ export const RowDeleter = (_:any, {filename}:UploadFeatures, index: number) => {
             // name - url map과 s3 상 파일 모두 제거
             setImageUrls(prev => {
                 const index = prev.findIndex(item => item.name === filename);
-                s3DeleteFile(prev[index].url)
                 if(index > -1){
+                    s3DeleteFile(prev[index].url)
                     return prev.slice(0, index).concat(prev.slice(index+1))
                 }
                 else return prev;

@@ -2,7 +2,7 @@ import { IoImageOutline } from "react-icons/io5"
 import { Button, Modal, Upload, ModalProps } from "antd"
 import { RcFile } from "antd/lib/upload"
 import { useRecoilState, useRecoilValue } from "recoil"
-import { imageUrlsState, problemsState, useGetSubjectCode } from "atoms"
+import { imageUrlsState, problemsState, subjectState, useGetSubjectCode } from "atoms"
 import { Box, Text } from "materials"
 
 import { UploadRequestOption } from "rc-upload/lib/interface";
@@ -15,6 +15,7 @@ const IconStyle = { marginBottom:-6, marginRight:6, fontSize: 23 }
 
 
 export const ImageUploader = ({...props}: ModalProps) => {
+    const subject = useRecoilValue(subjectState)
     const [imageUrls, setImageUrls] = useRecoilState(imageUrlsState);
     const problems = useRecoilValue(problemsState)
     const code = useGetSubjectCode()
@@ -30,6 +31,8 @@ export const ImageUploader = ({...props}: ModalProps) => {
     }
 
     const handleFiles = (file:RcFile, fileList:RcFile[]) => {
+        console.log(imageUrls)
+
         // 파일명에서 확장자 제거
         const fname = file.name.trim().replace(/(.png|.jpg|.jpeg|.gif)$/,'').normalize();
         
@@ -44,7 +47,7 @@ export const ImageUploader = ({...props}: ModalProps) => {
         // 중복 파일 검사
         const uploadedFiles = fileList.map(f => f.name)
         const isDuplicate = uploadedFiles.indexOf(file.name) !== uploadedFiles.lastIndexOf(file.name)
-        if(!isDuplicate){
+        if(isDuplicate){
             alert(`${file.name}가 중복으로 업로드 되었습니다.`)
             return Upload.LIST_IGNORE;
         }
@@ -52,7 +55,7 @@ export const ImageUploader = ({...props}: ModalProps) => {
         // 로컬스토리지 중복 파일 검사
         const uploadedLocalFiles = imageUrls.map(f => f.name)
         const isDuplicateLocal = uploadedLocalFiles.indexOf(fname) > -1
-        if(!isDuplicateLocal){
+        if(isDuplicateLocal){
             alert(`${file.name}는 이미 업로드 되어있습니다.`)
             return Upload.LIST_IGNORE;
         }
@@ -64,11 +67,17 @@ export const ImageUploader = ({...props}: ModalProps) => {
         if(!code || typeof file === "string" || !(file instanceof File))
             return false;
         try{
+            // 업로드한 파일 이름
             const fname = file.name.trim().replace(/(.png|.jpg|.jpeg|.gif)$/,'').normalize();
             const targetProblem = problems.find(p => p.filename === fname);
             if(!targetProblem)
                 throw Error("해당하는 문제가 없습니다.")
-            const s3Filename = `${targetProblem.year}-${targetProblem.month}`
+            
+            // S3에 저장될 파일 이름
+            const s3Filename = targetProblem.isExam ? 
+                `${targetProblem.year}_${targetProblem.month}월_${targetProblem.org}_${targetProblem.source}_${subject}_no${targetProblem.number}` 
+                : 
+                `${targetProblem.year}_${targetProblem.org}_${targetProblem.source}_${subject}_${targetProblem.number}` 
             const url = await s3UploadFile(file, code, s3Filename)
             addImageUrlMap(fname, url)
             onSuccess && onSuccess(() => {})

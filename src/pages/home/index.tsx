@@ -7,7 +7,7 @@ import { UploadFeatures } from "interfaces/upload-features.interface"
 import ProblemCsvReader from "./problem-uploader"
 import { useRecoilState, useResetRecoilState } from "recoil"
 import { subjectState, problemSelector } from "atoms"
-import { subjectName } from "interfaces/subject.interface"
+import { subjectNamesArr } from "interfaces/subject.interface"
 import { ImageUploader } from "./image-uploader"
 import { AiOutlineCaretRight } from "react-icons/ai"
 
@@ -93,7 +93,7 @@ export function Home(){
                     defaultValue={currentSubject} 
                     style={{ width: 120 }} 
                     onChange={setSubject}>
-                    {subjectName.map((s) => (
+                    {subjectNamesArr.map((s) => (
                         <Option value={s} children={s} key={s} />
                     ))}
                 </Select>
