@@ -10,6 +10,7 @@ import { subjectState, problemSelector } from "atoms"
 import { subjectNamesArr } from "interfaces/subject.interface"
 import { ImageUploader } from "./image-uploader"
 import { AiOutlineCaretRight } from "react-icons/ai"
+import { DownloadOutlined } from '@ant-design/icons';
 
 
 const { Option } = Select;
@@ -61,6 +62,8 @@ export function Home(){
             return;
         setIsImageModalVisible(true)
     }
+
+    const downloadForm = () => window.open('./문제 업로드 양식.xlsx')
     return (
         <Wrapper>
             <Box 
@@ -83,29 +86,41 @@ export function Home(){
                     <Button type="primary" style={{ backgroundColor: "#52C41A", border: 'none' }}>
                         전체 문제 및 사진 업로드
                     </Button>
-
                 </Gapbox>
             </Box>
 
-            <Gapbox style={{marginBottom: 18, alignSelf: "center"}}>
-                <Text type="P1" bold content="과목 선택" />
-                <Select 
-                    defaultValue={currentSubject} 
-                    style={{ width: 120 }} 
-                    onChange={setSubject}>
-                    {subjectNamesArr.map((s) => (
-                        <Option value={s} children={s} key={s} />
-                    ))}
-                </Select>
-                <span style={{paddingRight:32}} />
-                <Tag color="warning" children="과목 선택" />
-                <AiOutlineCaretRight color="#ababab" />
-                <Tag color="error" children="csv 파일 업로드" />
-                <AiOutlineCaretRight color="#ababab" />
-                <Tag color="processing" children="이미지 업로드" />
-                <AiOutlineCaretRight color="#ababab" />
-                <Tag color="success" children="문제 최종 업로드" />
-            </Gapbox>
+            <Box justifyContent="space-evenly">
+                <div>
+                    <Button 
+                        type="primary" 
+                        icon={<DownloadOutlined />}
+                        onClick={downloadForm}
+                    >
+                        엑셀 양식 파일 다운로드
+                    </Button>
+                    <Text type="P1" size={20} bold underlined marginLeft={12} content=".csv" />
+                    <Text type="P1" marginLeft={5} content="형식으로 변환 후 업로드 하세요!!" />
+                </div>
+                <Gapbox style={{marginBottom: 18, alignSelf: "center"}}>
+                    <Text type="P1" bold content="과목 선택" />
+                    <Select 
+                        defaultValue={currentSubject} 
+                        style={{ width: 120 }} 
+                        onChange={setSubject}>
+                        {subjectNamesArr.map((s) => (
+                            <Option value={s} children={s} key={s} />
+                        ))}
+                    </Select>
+                    <span style={{paddingRight:32}} />
+                    <Tag color="warning" children="과목 선택" />
+                    <AiOutlineCaretRight color="#ababab" />
+                    <Tag color="error" children="csv 파일 업로드" />
+                    <AiOutlineCaretRight color="#ababab" />
+                    <Tag color="processing" children="이미지 업로드" />
+                    <AiOutlineCaretRight color="#ababab" />
+                    <Tag color="success" children="문제 최종 업로드" />
+                </Gapbox>
+            </Box>
 
 
             <Text 

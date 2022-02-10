@@ -72,6 +72,7 @@ export default function ProblemCsvReader(){
             </label>
             <CSVReader
                 inputId='csv-file'
+                accept=".csv"
                 parserOptions={papaparseOptions}
                 onFileLoaded={onFileLoaded} 
             />
