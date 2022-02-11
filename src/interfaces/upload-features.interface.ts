@@ -32,6 +32,9 @@ export interface UploadFeatures {
  // 정답
     answer: boolean
 
+// 해설
+    solution: string
+
  // 사진파일명
     filename: string
 }

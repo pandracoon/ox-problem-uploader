@@ -72,6 +72,13 @@ export const columns: ColumnsType<UploadFeatures> = [
       render: AnswerRenderer
     },
     {
+      title: '해설',
+      dataIndex: 'solution',
+      key: 'solution',
+      align: "center",
+      ellipsis: true,
+    },
+    {
       title: '사진파일명',
       dataIndex: 'filename',
       align: 'center',
