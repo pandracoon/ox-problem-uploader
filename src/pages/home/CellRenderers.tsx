@@ -1,12 +1,12 @@
 import { UploadFeatures } from "interfaces/upload-features.interface"
-import { IoMdWarning } from "react-icons/io"
+import { IoMdAdd, IoMdWarning } from "react-icons/io"
 import { problemsState, imageUrlsState, useGetunit } from "atoms";
 import { RiDeleteBin6Line } from "react-icons/ri"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Button, Tag, Image } from "antd";
 import { Box } from "materials";
 import { useState } from "react";
-import { IoCloseSharp } from "react-icons/io5";
+import { IoAdd, IoAddSharp, IoCloseSharp } from "react-icons/io5";
 import { s3DeleteFile } from "api/s3/\bs3deleteFile";
 
 export const IsExamRenderer = (value:string, record:UploadFeatures) => {
@@ -51,11 +51,12 @@ export const UnitRenderer = (value:string, record: UploadFeatures) => {
 
 export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
     const setImageUrls = useSetRecoilState(imageUrlsState);
-    const [visible, onVisibleChange] = useState<boolean>(false);
-    const open = () => onVisibleChange(true);
-
+    const [Modalvisible, onVisibleChange] = useState<boolean>(false);
+    
     const urls = useRecoilValue(imageUrlsState)
     const url = urls.find(item => item.name === record.filename)
+    
+    const open = () => url && onVisibleChange(true);
 
     const onRemove = () => {
         if(!url)
@@ -75,39 +76,36 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
     }
 
     return (
-        <Box flexDirection="column">
+        <Box>
             <Tag 
                 color={url ? "blue" : "red"} 
                 children={record.filename}
-                style={{marginBottom:5}}
+                onClick={open}
+                style={{
+                    flex: 1,
+                    marginBottom:5,
+                    cursor: 'pointer'
+                }}
             />
-            {url? (
-                <Box justifyContent="space-around" flex={1} >
-                    <Button 
-                        color="ghost" 
-                        children="이미지 보기" 
-                        size="small"
-                        onClick={open} 
-                    /> 
-                    <IoCloseSharp 
-                        size={24} 
-                        color="#ff4d4f" 
-                        onClick={onRemove}
-                    />
-                    <Image
-                        width={0}
-                        style={{ display: 'none' }}
-                        src={url.url}
-                        preview={{
-                            visible,
-                            src: url.url,
-                            onVisibleChange
-                        }}
-                    />
-                </Box>
-            ): (
-                <Tag color="red" children="이미지 없음" />
-            )}
+            {url ? (
+            <>
+                <IoCloseSharp size={18} onClick={onRemove}/>
+                <Image
+                    width={0}
+                    style={{ display: 'none' }}
+                    src={url.url}
+                    preview={{
+                        visible: Modalvisible,
+                        src: url.url,
+                        onVisibleChange
+                    }}
+                />
+            </>)
+            :
+            <>
+                <IoMdAdd size={18} />
+            </>
+            }
         </Box>
     )
     

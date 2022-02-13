@@ -94,6 +94,7 @@ export const columns: ColumnsType<UploadFeatures> = [
       align: 'center',
       key: 'filename',
       render: ImageNameRenderer,
+      width: 160
     },
     {
       title: "삭제",
