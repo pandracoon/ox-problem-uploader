@@ -28,12 +28,14 @@ export const columns: ColumnsType<UploadFeatures> = [
       dataIndex: 'source',
       key: 'source',
       align: 'center',
+      ellipsis: true,
     },
     {
       title: '출제기관',
       dataIndex: 'org',
       key: 'org',
       align: 'center',
+      ellipsis: true,
     },
     {
       title: '번호',
@@ -45,12 +47,14 @@ export const columns: ColumnsType<UploadFeatures> = [
       title: '대단원',
       dataIndex: 'chapter',
       key: 'chapter',
+      ellipsis: true,
       render: ChapterRenderer
     },
     {
       title: '소단원',
       dataIndex: 'unit',
       key: 'unit',
+      ellipsis: true,
       render: UnitRenderer
     },
     {

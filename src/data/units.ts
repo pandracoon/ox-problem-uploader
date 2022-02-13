@@ -1,5 +1,86 @@
 import { ISubject, IUnit } from "interfaces/subject.interface"
 
+const HistoryUnits:IUnit[] = [
+    {
+        index: 1,
+        chapter: 'Ⅰ. 전근대 한국사의 이해',
+        unit: '01. 고대 국가의 정치 · 사회와 문화'
+    },
+    {
+        index: 2,
+        chapter: 'Ⅰ. 전근대 한국사의 이해',
+        unit: '02. 고려의 정치 · 사회와 문화'
+    },
+    {
+        index: 3,
+        chapter: 'Ⅰ. 전근대 한국사의 이해',
+        unit: '03. 조선 시대 정치 운영과 세계관의 변화'
+    },
+    {
+        index: 4,
+        chapter: 'Ⅰ. 전근대 한국사의 이해',
+        unit: '04. 양반 신분제 사회와 상품 화폐 경제'
+
+    },
+    {
+        index: 5,
+        chapter: 'Ⅱ. 근대 국민 국가 수립 운동',
+        unit: '05. 흥선 대원군의 정책과 개항 이후 근대적 개혁의 추진'
+    },
+    {
+        index: 6,
+        chapter: 'Ⅱ. 근대 국민 국가 수립 운동',
+        unit: '06. 근대 국가 수립을 위한 노력'
+    },
+    {
+        index: 7,
+        chapter: 'Ⅱ. 근대 국민 국가 수립 운동',
+        unit: '07. 일본의 침략 확대와 국권 수호 운동'
+    },
+    {
+        index: 8,
+        chapter: 'Ⅱ. 근대 국민 국가 수립 운동',
+        unit: '08. 개항 이후 경제 · 사회 · 문화의 변화'
+
+    },
+    {
+        index: 9,
+        chapter: 'Ⅲ. 일제 식민지 지배와 민족 운동의 전개',
+        unit: '09. 1910~1920년대 일제의 식민지 정책과 3·1운동 · 대한민국 임시 정부'
+    },
+    {
+        index:10,
+        chapter: 'Ⅲ. 일제 식민지 지배와 민족 운동의 전개',
+        unit: '10. 다양한 민족 운동의 전개'
+    },
+    {
+        index:11,
+        chapter: 'Ⅲ. 일제 식민지 지배와 민족 운동의 전개',
+        unit: '11. 사회 · 문화의 변화와 사회 운동'
+    },
+    {
+        index:12,
+        chapter: 'Ⅲ. 일제 식민지 지배와 민족 운동의 전개',
+        unit: '12. 전시 동원 체제와 광복을 위한 노력'
+
+    },
+    {
+        index:13,
+        chapter: 'Ⅳ. 대한민국의 발전',
+        unit: '13. 대한민국 정부 수립과 6·25 전쟁'
+    },
+    {
+        index:14,
+        chapter: 'Ⅳ. 대한민국의 발전',
+        unit: '14. 민주화를 위한 노력과 경제 성장'
+    },
+    {
+        index:15,
+        chapter: 'Ⅳ. 대한민국의 발전',
+        unit: '15. 6월 민주 항쟁 이후 사회와 동아시아 평화를 위한 노력'
+    }
+]
+
 const PhysicsUnits:IUnit[] = [{
     index: 1,
     chapter: "Ⅰ. 역학과 에너지",
@@ -227,6 +308,11 @@ const EarthUnits:IUnit[] = [
 ]
 
 export const subjectsData:ISubject[] = [
+    {
+        code: "HIS",
+        name: "한국사",
+        units: HistoryUnits
+    },
     {
         code: "PHY-1",
         name: "물리학1",
