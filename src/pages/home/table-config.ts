@@ -9,26 +9,29 @@ export const columns: ColumnsType<UploadFeatures> = [
       dataIndex: 'isExam',
       key: 'isExam',
       align: "center",
-      render: IsExamRenderer
+      render: IsExamRenderer,
+      width: 90
     },
     {
       title: '발행연도',
       dataIndex: 'year',
       key: 'year',
       align: 'center',
+      width: 90
     },
     {
       title: '월',
       dataIndex:  'month',
       key:  'month',
       align: 'center',
+      width: 60
     },
     {
       title: '출처명',
       dataIndex: 'source',
       key: 'source',
       align: 'center',
-      ellipsis: true,
+      width: 90
     },
     {
       title: '출제기관',
@@ -36,18 +39,21 @@ export const columns: ColumnsType<UploadFeatures> = [
       key: 'org',
       align: 'center',
       ellipsis: true,
+      width: 90
     },
     {
       title: '번호',
       dataIndex: 'number',
       key: 'number',
       align: 'center',
+      width: 70
     }, 
     {
       title: '대단원',
       dataIndex: 'chapter',
       key: 'chapter',
       ellipsis: true,
+      width: 120,
       render: ChapterRenderer
     },
     {
@@ -55,6 +61,7 @@ export const columns: ColumnsType<UploadFeatures> = [
       dataIndex: 'unit',
       key: 'unit',
       ellipsis: true,
+      width: 140,
       render: UnitRenderer
     },
     {
@@ -62,6 +69,7 @@ export const columns: ColumnsType<UploadFeatures> = [
       dataIndex:	 'no',
       key: 'no',
       align: 'center',
+      width: 58
     },
     {
       title: '문제',
@@ -73,19 +81,20 @@ export const columns: ColumnsType<UploadFeatures> = [
       dataIndex: 'answer',
       key: 'answer',
       align: "center",
-      render: AnswerRenderer
+      render: AnswerRenderer,
+      width: 70
     },
     {
       title: '정답률',
       dataIndex: 'answer_ratio',
       key: 'answer_ratio',
       align: "center",
+      width: 70
     },
     {
       title: '해설',
       dataIndex: 'solution',
       key: 'solution',
-      align: "center",
       ellipsis: true,
     },
     {
@@ -94,12 +103,13 @@ export const columns: ColumnsType<UploadFeatures> = [
       align: 'center',
       key: 'filename',
       render: ImageNameRenderer,
-      width: 160
+      width: 130
     },
     {
       title: "삭제",
       key: "delete",
       align: 'center',
-      render: RowDeleter
+      render: RowDeleter,
+      width: 60
     }
 ];
