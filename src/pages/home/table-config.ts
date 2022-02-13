@@ -72,6 +72,12 @@ export const columns: ColumnsType<UploadFeatures> = [
       render: AnswerRenderer
     },
     {
+      title: '정답률',
+      dataIndex: 'answer_ratio',
+      key: 'answer_ratio',
+      align: "center",
+    },
+    {
       title: '해설',
       dataIndex: 'solution',
       key: 'solution',

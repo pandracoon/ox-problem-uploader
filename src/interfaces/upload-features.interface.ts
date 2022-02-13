@@ -31,6 +31,9 @@ export interface UploadFeatures {
     
  // 정답
     answer: boolean
+ 
+// 정답
+    answer_ratio: number
 
 // 해설
     solution: string

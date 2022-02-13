@@ -37,8 +37,7 @@ export default function ProblemCsvReader(){
         const rawDatas = data.slice(1);
         const problems:UploadFeatures[] = rawDatas.map(
             ([isExam, year,month,source,org,number,
-                unit,no,question,answer,solution,filename], index) => {
-                
+                unit,no,question,answer,answer_ratio,solution,filename], index) => {
                 return {
                     key: keyItem+index,
                     isExam: !!+isExam,
@@ -52,11 +51,12 @@ export default function ProblemCsvReader(){
                     no,
                     question: question.trim(),
                     answer: !!+answer,
+                    answer_ratio: +answer_ratio,
                     solution: solution.trim(),
                     filename: filename.trim()
                 }
             }
-        )
+        ).filter(q => q.question)
         appendProblems(problems)
     }
 
