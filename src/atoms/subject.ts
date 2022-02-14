@@ -1,6 +1,5 @@
-import { getChaptersApi } from "api/get-chapters.api";
 import { ISubjectWithChapters } from "interfaces/subject.interface";
-import { atom, DefaultValue, selector, useRecoilValue } from "recoil";
+import { atom, useRecoilValue } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { defaultSubject } from "./defaultSubject";
 
@@ -29,13 +28,6 @@ export const useGetunit = (index: number):IUnitInfo | null => {
     const unitInfo =  targetChapter.units.find(u => +u.index === +index)
     if(!unitInfo)
         return null;
-
-    console.log({
-        chapter: targetChapter.title,
-        chapterId: targetChapter.id,
-        unit: unitInfo.title,
-        unitId: unitInfo.id
-    })
 
     return {
         chapter: targetChapter.title,
