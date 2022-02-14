@@ -3,10 +3,10 @@ import { IoMdAdd, IoMdWarning } from "react-icons/io"
 import { problemsState, imageUrlsState, useGetunit } from "atoms";
 import { RiDeleteBin6Line } from "react-icons/ri"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { Button, Tag, Image } from "antd";
+import { Tag, Image } from "antd";
 import { Box } from "materials";
 import { useState } from "react";
-import { IoAdd, IoAddSharp, IoCloseSharp } from "react-icons/io5";
+import { IoCloseSharp } from "react-icons/io5";
 import { s3DeleteFile } from "api/s3/\bs3deleteFile";
 
 export const IsExamRenderer = (value:string, record:UploadFeatures) => {

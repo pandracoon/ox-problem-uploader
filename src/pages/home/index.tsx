@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Text } from "materials"
 import styled from "styled-components"
 import { Button, Select, Table, Tag } from "antd"
@@ -6,11 +6,13 @@ import { columns } from './table-config'
 import { UploadFeatures } from "interfaces/upload-features.interface"
 import ProblemCsvReader from "./problem-uploader"
 import { useRecoilState, useResetRecoilState } from "recoil"
-import { subjectState, problemSelector } from "atoms"
-import { subjectNamesArr } from "interfaces/subject.interface"
+import { currentSubjectState, problemSelector } from "atoms"
 import { ImageUploader } from "./image-uploader"
 import { AiOutlineCaretRight } from "react-icons/ai"
 import { DownloadOutlined } from '@ant-design/icons';
+import { ISubject } from "interfaces/subject.interface"
+import { getSubjectsApi } from "api/get-subjects.api"
+import { getChaptersApi } from "api/get-chapters.api"
 
 
 const { Option } = Select;
@@ -28,7 +30,19 @@ const Gapbox = styled.div`
 `
 
 export function Home(){
-    const [currentSubject, setSubject] = useRecoilState(subjectState)
+    const [subjectsList, setSubjectsList] = useState<Omit<ISubject, 'chapters'>[]>([])
+    const [currentSubject, setSubject] = useRecoilState(currentSubjectState)
+    
+    // subject 목록 받아오기
+    useEffect(() => {
+        getSubjectsApi()
+            .then(res => setSubjectsList(res.data))
+    },[])
+
+    const selectSubject = (code: string) => {
+        getChaptersApi(code)
+            .then(res => setSubject(res.data))
+    }
 
     // 문제 휴지통
     const [bin, setBin] = useState<UploadFeatures[]>([])
@@ -104,11 +118,11 @@ export function Home(){
                 <Gapbox style={{marginBottom: 18, alignSelf: "center"}}>
                     <Text type="P1" bold content="과목 선택" />
                     <Select 
-                        defaultValue={currentSubject} 
+                        defaultValue={currentSubject.code} 
                         style={{ width: 120 }} 
-                        onChange={setSubject}>
-                        {subjectNamesArr.map((s) => (
-                            <Option value={s} children={s} key={s} />
+                        onChange={selectSubject}>
+                        {subjectsList.map((s) => (
+                            <Option value={s.code} children={s.name} key={s.code} />
                         ))}
                     </Select>
                     <span style={{paddingRight:32}} />
@@ -126,7 +140,7 @@ export function Home(){
             <Text 
                 align="center" 
                 type="H2" 
-                content={currentSubject} 
+                content={currentSubject.name} 
                 marginBottom={24}
                 underlined
             />

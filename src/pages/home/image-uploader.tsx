@@ -2,9 +2,8 @@ import { IoImageOutline } from "react-icons/io5"
 import { Button, Modal, Upload, ModalProps } from "antd"
 import { RcFile } from "antd/lib/upload"
 import { useRecoilState, useRecoilValue } from "recoil"
-import { imageUrlsState, problemsState, subjectState, useGetSubjectCode } from "atoms"
+import { imageUrlsState, problemsState, currentSubjectState } from "atoms"
 import { Box, Text } from "materials"
-
 import { UploadRequestOption } from "rc-upload/lib/interface";
 import { UploadFile } from "antd/lib/upload/interface"
 import { s3UploadFile } from "api/s3/\bs3uploadFile"
@@ -15,10 +14,9 @@ const IconStyle = { marginBottom:-6, marginRight:6, fontSize: 23 }
 
 
 export const ImageUploader = ({...props}: ModalProps) => {
-    const subject = useRecoilValue(subjectState)
+    const { code, name } = useRecoilValue(currentSubjectState)
     const [imageUrls, setImageUrls] = useRecoilState(imageUrlsState);
     const problems = useRecoilValue(problemsState)
-    const code = useGetSubjectCode()
 
     const addImageUrlMap = (name: string, url: string) => {
         setImageUrls(prev => {
@@ -31,7 +29,6 @@ export const ImageUploader = ({...props}: ModalProps) => {
     }
 
     const handleFiles = (file:RcFile, fileList:RcFile[]) => {
-        console.log(imageUrls)
 
         // 파일명에서 확장자 제거
         const fname = file.name.trim().replace(/(.png|.jpg|.jpeg|.gif)$/,'').normalize();
@@ -75,9 +72,9 @@ export const ImageUploader = ({...props}: ModalProps) => {
             
             // S3에 저장될 파일 이름
             const s3Filename = targetProblem.isExam ? 
-                `${targetProblem.year}_${targetProblem.month}월_${targetProblem.org}_${targetProblem.source}_${subject}_no${targetProblem.number}` 
+                `${targetProblem.year}_${targetProblem.month}월_${targetProblem.org}_${targetProblem.source}_${name}_no${targetProblem.number}` 
                 : 
-                `${targetProblem.year}_${targetProblem.org}_${targetProblem.source}_${subject}_${targetProblem.number}` 
+                `${targetProblem.year}_${targetProblem.org}_${targetProblem.source}_${name}_${targetProblem.number}` 
             const url = await s3UploadFile(file, code, s3Filename)
             addImageUrlMap(fname, url)
             onSuccess && onSuccess(() => {})

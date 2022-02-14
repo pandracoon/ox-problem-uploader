@@ -1,18 +1,24 @@
 
 export interface IUnit {
-    index: number,
-    chapter: string,
-    unit: string
+    id: number
+    index: number
+    title: string
 }
 
-export const subjectNamesArr = ['한국사','물리학1', '화학1', '생명과학1', '지구과학1'] as const;
-export type SubjectNameType = typeof subjectNamesArr[number];
-
-export const subject_code = ["HIS", "PHY-1", "PHY-2", "CHE-1", "CHE-2", "BIO-1", "BIO-2", "EAR-1", "EAR-2"] as const
-export type SubjectCodeType = typeof subject_code[number];
+export interface IChapter {
+    id: number
+    title: string
+    index: number
+    units: IUnit[]
+}
 
 export interface ISubject {
-    code: SubjectCodeType
-    name: SubjectNameType
-    units: IUnit[]
+    code: string
+    name: string
+}
+
+export interface ISubjectWithChapters {
+    code: string
+    name: string
+    chapters: IChapter[]
 }

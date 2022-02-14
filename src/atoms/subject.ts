@@ -1,28 +1,46 @@
-import { subjectsData } from "data/units";
-import { SubjectNameType } from "interfaces/subject.interface";
-import { atom, useRecoilValue } from "recoil";
+import { getChaptersApi } from "api/get-chapters.api";
+import { ISubjectWithChapters } from "interfaces/subject.interface";
+import { atom, DefaultValue, selector, useRecoilValue } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import { defaultSubject } from "./defaultSubject";
 
 const { persistAtom } = recoilPersist()
 
-export const subjectState = atom<SubjectNameType>({
+
+export const currentSubjectState = atom<ISubjectWithChapters>({
     key: 'subjects/name',
-    default: '생명과학1',
+    default: defaultSubject,
     effects_UNSTABLE: [persistAtom],
 })
 
-// 소단원 숫자를 통해 단원 전체 정보 얻음
-export const useGetunit = (index: number) => {
-    const currentSubject = useRecoilValue(subjectState)
-    const unitInfo = subjectsData
-                        .find(s => s.name===currentSubject)?.units
-                        .find(u => u.index===index)
-    return unitInfo
+interface IUnitInfo {
+    chapter: string
+    chapterId: number
+    unit: string
+    unitId: number
 }
-
 // 소단원 숫자를 통해 단원 전체 정보 얻음
-export const useGetSubjectCode = () => {
-    const currentSubject = useRecoilValue(subjectState)
-    const code = subjectsData.find(s => s.name===currentSubject)?.code
-    return code
+export const useGetunit = (index: number):IUnitInfo | null => {
+    const {chapters} = useRecoilValue(currentSubjectState)
+    const targetChapter = chapters.find(ch => ch.units.findIndex(u => +u.index === +index) > -1)
+    if(!targetChapter)
+        return null;
+        
+    const unitInfo =  targetChapter.units.find(u => +u.index === +index)
+    if(!unitInfo)
+        return null;
+
+    console.log({
+        chapter: targetChapter.title,
+        chapterId: targetChapter.id,
+        unit: unitInfo.title,
+        unitId: unitInfo.id
+    })
+
+    return {
+        chapter: targetChapter.title,
+        chapterId: targetChapter.id,
+        unit: unitInfo.title,
+        unitId: unitInfo.id
+    }
 }
