@@ -7,7 +7,7 @@ import { UploadFeatures } from "interfaces/upload-features.interface"
 import ProblemCsvReader from "./problem-uploader"
 import { useRecoilState, useResetRecoilState } from "recoil"
 import { currentSubjectState, problemSelector } from "atoms"
-import { ImageUploader } from "./image-uploader"
+import { ImageUploader } from "./image-uploaders/multi-image-uploader"
 import { AiOutlineCaretRight } from "react-icons/ai"
 import { DownloadOutlined } from '@ant-design/icons';
 import { ISubject } from "interfaces/subject.interface"

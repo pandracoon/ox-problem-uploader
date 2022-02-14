@@ -1,19 +1,12 @@
-import { IoImageOutline } from "react-icons/io5"
-import { Button, Modal, Upload, ModalProps } from "antd"
-import { RcFile } from "antd/lib/upload"
-import { useRecoilState, useRecoilValue } from "recoil"
-import { imageUrlsState, problemsState, currentSubjectState } from "atoms"
-import { Box, Text } from "materials"
+import Upload, { RcFile } from "antd/lib/upload";
+import { currentSubjectState, imageUrlsState, problemsState } from "atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { UploadRequestOption } from "rc-upload/lib/interface";
-import { UploadFile } from "antd/lib/upload/interface"
-import { s3UploadFile } from "api/s3/\bs3uploadFile"
-import { s3DeleteFile } from "api/s3/\bs3deleteFile"
+import { s3UploadFile } from "api/s3/\bs3uploadFile";
+import { UploadFile } from "antd/lib/upload/interface";
+import { s3DeleteFile } from "api/s3/\bs3deleteFile";
 
-const ButtonStyle = { marginBottom:12 }
-const IconStyle = { marginBottom:-6, marginRight:6, fontSize: 23 }
-
-
-export const ImageUploader = ({...props}: ModalProps) => {
+export const useUploadFiles = () => {
     const { code, name } = useRecoilValue(currentSubjectState)
     const [imageUrls, setImageUrls] = useRecoilState(imageUrlsState);
     const problems = useRecoilValue(problemsState)
@@ -29,7 +22,6 @@ export const ImageUploader = ({...props}: ModalProps) => {
     }
 
     const handleFiles = (file:RcFile, fileList:RcFile[]) => {
-
         // 파일명에서 확장자 제거
         const fname = file.name.trim().replace(/(.png|.jpg|.jpeg|.gif)$/,'').normalize();
         
@@ -85,7 +77,7 @@ export const ImageUploader = ({...props}: ModalProps) => {
         }
     }
 
-    const onRemove = (file:UploadFile) => {
+    const remove = (file:UploadFile) => {
         setImageUrls(prev => {
             const index = prev.findIndex(item => item.name === file.name);
             s3DeleteFile(prev[index].url)
@@ -94,32 +86,11 @@ export const ImageUploader = ({...props}: ModalProps) => {
             }
             else return prev;
         });
-
     }
-    return (
-        <Modal title="이미지 업로드" {...props} >
-            <Box flexDirection="column" marginBottom={15}>
-                <Text type="P1" bold size={18} content="문제 csv 파일 업로드를 완료한 후 이미지를 업로드해주세요."/>
-                <Text type="P2" content="파일명이 같은 파일은 하나만 업로드 됩니다."/>
-            </Box>
-            <Upload 
-                listType="picture"
-                accept="image/*"
-                multiple
-                beforeUpload={handleFiles}
-                customRequest={customRequest}
-                onRemove={onRemove}
-                showUploadList={{
-                    removeIcon: null
-                }}
-            >
-                <Button 
-                    style={ButtonStyle} 
-                    icon={<IoImageOutline style={IconStyle} />}
-                >
-                    문제 그림 업로드
-                </Button>
-            </Upload>
-        </Modal>
-    )
+
+    return {
+        handleFiles,
+        customRequest,
+        remove
+    }
 }

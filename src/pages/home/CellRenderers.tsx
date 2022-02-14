@@ -75,6 +75,8 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
         s3DeleteFile(url.url)
     }
 
+    const [addingFilename, setAddingFilename] = useState<string | null>(null)
+
     return (
         <Box>
             <Tag 
