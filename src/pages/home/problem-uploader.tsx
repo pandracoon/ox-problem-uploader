@@ -4,7 +4,7 @@ import { GrDocumentCsv } from 'react-icons/gr'
 import { problemSelector, useGetunit } from 'atoms';
 import { useSetRecoilState } from 'recoil';
 import CSVReader, { IFileInfo } from 'react-csv-reader';
-import { UploadFeatures } from 'interfaces/upload-features.interface';
+import { ChoiceUploadFeatures, UploadFeatures } from 'interfaces/upload-features.interface';
 import styled from 'styled-components';
 import { IChoice } from "interfaces/create-problem.interface";
 
@@ -46,8 +46,8 @@ export default function ProblemCsvReader(){
                 description,correct_rate,filename, choicesNotation, ...choicesEntry], index) => {
                 const unitInfo = getUnitInfo(+unit)
 
-                const choices:IChoice[] = []
-                for (let i = 0; i < choicesEntry.length; i+=3) {
+                const choices:ChoiceUploadFeatures[] = []
+                for (let i = 0; i < choicesEntry.length; i+=4) {
                     const $ = Math.floor(i/3);
                     let index;
                     if(choicesNotation === "ko"){
@@ -63,12 +63,18 @@ export default function ProblemCsvReader(){
                         break;
                     const answer = !!(+choicesEntry[i+1])
                     const solution = choicesEntry[i+2].trim()
-                    choices.push({
+                    const choice = {
                         index,
                         question,
                         answer,
-                        solution
-                    })
+                        solution,
+                    }
+
+                    const filename = choicesEntry[i+3].trim()
+                    if(filename)
+                        Object.assign(choice, filename)
+                        
+                    choices.push(choice)
                 }
 
                 return {

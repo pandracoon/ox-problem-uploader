@@ -108,12 +108,13 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
 export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
     return (
         <Box justifyContent="center">
-            {choices.map(({index, question, solution, answer}) => {
+            {choices.map(({index, question, solution, answer, filename}) => {
                 const content = (
                     <Box flexDirection="column">
                         <Text bold content={question} />
                         <Text content={`정답: ${answer ? "O" : "X"}`} />
                         <Text type="D2" content={solution} />
+                        {filename && <Text type="D2" content={"세부 이미지: "+filename} />}
                     </Box>
                 )
 

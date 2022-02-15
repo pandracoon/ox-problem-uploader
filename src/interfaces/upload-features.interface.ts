@@ -1,9 +1,13 @@
 import { IChoice } from "./create-problem.interface";
 import { IUnitInfo } from "./subject.interface";
 
+export interface ChoiceUploadFeatures extends Omit<IChoice, "image"> {
+   filename?: string
+}
+
 export interface UploadFeatures {
       key: string
-      
+
  // 시험여부
     isExam: boolean
     
@@ -35,5 +39,5 @@ export interface UploadFeatures {
     filename: string
 
  //  선지
-   choices: IChoice[]
+   choices: ChoiceUploadFeatures[]
 }

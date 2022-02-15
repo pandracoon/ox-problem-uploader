@@ -45,4 +45,5 @@ export interface IChoice {
     question: string
     answer: boolean
     solution: string
+    image?: string
 }
