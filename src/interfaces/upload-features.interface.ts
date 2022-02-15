@@ -1,4 +1,9 @@
+import { IChoice } from "./create-problem.interface";
+import { IUnitInfo } from "./subject.interface";
+
 export interface UploadFeatures {
+      key: string
+      
  // 시험여부
     isExam: boolean
     
@@ -17,27 +22,18 @@ export interface UploadFeatures {
  // 번호
     number: string
 
- // 대단원
-    chapter: string
-
  // 소단원
-    unit: string
+    unit: IUnitInfo | null
 
- //  선지	
-    no: string
-
- // 문제
-    question: string
-    
- // 정답
-    answer: boolean
+ // 자료설명
+    description: string
  
-// 정답
-    answer_ratio: number
-
-// 해설
-    solution: string
+// 정답률
+    correct_rate: number
 
  // 사진파일명
     filename: string
+
+ //  선지
+   choices: IChoice[]
 }

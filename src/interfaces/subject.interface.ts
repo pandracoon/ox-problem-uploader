@@ -22,3 +22,10 @@ export interface ISubjectWithChapters {
     name: string
     chapters: IChapter[]
 }
+
+export interface IUnitInfo {
+    chapter: string
+    chapterId: number
+    unit: string
+    unitId: number
+}

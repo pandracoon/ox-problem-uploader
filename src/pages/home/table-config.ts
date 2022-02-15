@@ -1,6 +1,6 @@
 import { ColumnsType } from "antd/lib/table";
 import { UploadFeatures } from "interfaces/upload-features.interface";
-import { ChapterRenderer, UnitRenderer, RowDeleter, AnswerRenderer, ImageNameRenderer, IsExamRenderer } from "./CellRenderers";
+import { ChapterRenderer, UnitRenderer, RowDeleter, ImageNameRenderer, IsExamRenderer, ChoiceRenderer } from "./CellRenderers";
 
 
 export const columns: ColumnsType<UploadFeatures> = [
@@ -53,49 +53,28 @@ export const columns: ColumnsType<UploadFeatures> = [
       dataIndex: 'chapter',
       key: 'chapter',
       ellipsis: true,
-      width: 120,
+      width: 150,
       render: ChapterRenderer
     },
     {
       title: '소단원',
-      dataIndex: 'unit',
+      dataIndex: 'chapter',
       key: 'unit',
       ellipsis: true,
-      width: 140,
+      width: 150,
       render: UnitRenderer
     },
     {
-      title: ' 선지',
-      dataIndex:	 'no',
-      key: 'no',
-      align: 'center',
-      width: 58
-    },
-    {
-      title: '문제',
-      dataIndex: 'question',
-      key: 'question',      
-    },
-    {
-      title: '정답',
-      dataIndex: 'answer',
-      key: 'answer',
-      align: "center",
-      render: AnswerRenderer,
-      width: 70
+      title: '자료 설명',
+      dataIndex: 'description',
+      key: 'description',
     },
     {
       title: '정답률',
-      dataIndex: 'answer_ratio',
-      key: 'answer_ratio',
+      dataIndex: 'correct_rate',
+      key: 'correct_rate',
       align: "center",
       width: 70
-    },
-    {
-      title: '해설',
-      dataIndex: 'solution',
-      key: 'solution',
-      ellipsis: true,
     },
     {
       title: '사진파일명',
@@ -104,6 +83,14 @@ export const columns: ColumnsType<UploadFeatures> = [
       key: 'filename',
       render: ImageNameRenderer,
       width: 130
+    },
+    {
+      title: '선지',
+      dataIndex: 'choices',
+      key: 'choices',
+      align: 'center',
+      render: ChoiceRenderer,
+      width: 160
     },
     {
       title: "삭제",

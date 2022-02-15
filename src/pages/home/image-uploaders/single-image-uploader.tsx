@@ -1,17 +1,19 @@
 import { Modal, ModalProps, Upload } from "antd"
+import { Box, Text } from "materials";
+import { IoAdd } from "react-icons/io5";
 import { useUploadFiles } from "./hooks";
 import { UploadButton } from "./upload-button";
 
 export interface SingleImageUploaderProps extends ModalProps {
-    targetFilename?: string
+    targetFilename: string
 }
 
 export const SingleImageUploader = ({targetFilename, ...props}:SingleImageUploaderProps) => {
     const {handleFiles, customRequest, remove} = useUploadFiles()
     
 
-    return targetFilename ? (
-        <Modal title={`${targetFilename} 업로드`}>
+    return (
+        <Modal title={`${targetFilename} 업로드`} {...props} >
             <Upload 
                 listType="picture-card"
                 accept="image/*"
@@ -22,8 +24,13 @@ export const SingleImageUploader = ({targetFilename, ...props}:SingleImageUpload
                     removeIcon: null
                 }}
             >
-                <UploadButton />
+                <Box flexDirection="column" alignItems="center">
+                    <IoAdd size={40} />
+                   <Text type="D1" content={targetFilename} elipsis marginBottom={-3}/>
+                   <Text type="D2" content="업로드" />
+                </Box>
+                {/* <UploadButton /> */}
             </Upload>
         </Modal>
-    ) : null
+    )
 }

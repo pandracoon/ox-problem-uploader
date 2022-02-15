@@ -18,27 +18,31 @@ export interface CreateProblemInput {
     // 문제집은 페이지 포함
     number: string
 
-    // 선지
-    // ex) ㄱ, 1
-    no: string
-
-    // 문제
-    question: string
+    // 자료 설명
+    description?: string
     
-    // 정답
-    answer: boolean
-
-    // 해설
-    solution: string
+    // 정답률
+    correct_rate: number
 
     // 사진파일 url
-    image: string
+    image?: string
 
     // 소단원 id
     unitId: number
+
+
+    // 선지
+    choices: IChoice[]
 }
 
 export interface CreateProblemOutput {
     succeed: number
     fail: number
+}
+
+export interface IChoice {
+    index: string
+    question: string
+    answer: boolean
+    solution: string
 }

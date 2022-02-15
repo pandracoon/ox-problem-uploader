@@ -2,5 +2,5 @@ import { CreateProblemOutput, CreateProblemInput } from "interfaces/create-probl
 import { requestAPI } from "./config"
 
 export const createProblemsApi = (problems:CreateProblemInput[]) => {
-    return requestAPI().post<CreateProblemOutput>('problem', {problems})
+    return requestAPI().post<CreateProblemOutput>('problems', {problems})
 }

@@ -1,13 +1,14 @@
 import { UploadFeatures } from "interfaces/upload-features.interface"
 import { IoMdAdd, IoMdWarning } from "react-icons/io"
-import { problemsState, imageUrlsState, useGetunit } from "atoms";
+import { problemsState, imageUrlsState } from "atoms";
 import { RiDeleteBin6Line } from "react-icons/ri"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { Tag, Image } from "antd";
-import { Box } from "materials";
+import { Tag, Image, Popover } from "antd";
+import { Box, Text } from "materials";
 import { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { s3DeleteFile } from "api/s3/\bs3deleteFile";
+import { SingleImageUploader } from "./image-uploaders/single-image-uploader";
 
 export const IsExamRenderer = (value:string, record:UploadFeatures) => {
     const { isExam } = record;
@@ -19,34 +20,17 @@ export const IsExamRenderer = (value:string, record:UploadFeatures) => {
         />
     )
 }
-export const AnswerRenderer = (value:string, record:UploadFeatures) => {
-    const { answer } = record;
-    return (
-        <Tag 
-            style={{fontSize:14}} 
-            color={answer ? "blue" : "red"} 
-            children={answer ? "O" : "X"} 
-        />
-    )
-}
 
-export const ChapterRenderer = (value:string, record:UploadFeatures) => {
-    const unitInfo = useGetunit(+record.unit)
-    return unitInfo ? (
-        unitInfo.chapter    
-    ) : (
+export const ChapterRenderer = (value:string, {unit}:UploadFeatures) => {
+    return unit ? unit.chapter : (
         <IoMdWarning color="#FF4D4F" size={18} />
     )
 }
-export const UnitRenderer = (value:string, record: UploadFeatures) => {
-    const unitInfo = useGetunit(+record.unit)
-    return unitInfo ? (
-        unitInfo.unit   
-    ) : (
+export const UnitRenderer = (value:string, {unit}: UploadFeatures) => {
+    return unit ? unit.unit  : (
         <IoMdWarning color="#FF4D4F" size={18} />
     )
 }
-
 
 
 export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
@@ -56,7 +40,7 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
     const urls = useRecoilValue(imageUrlsState)
     const url = urls.find(item => item.name === record.filename)
     
-    const open = () => url && onVisibleChange(true);
+    const openImageView = () => url && onVisibleChange(true);
 
     const onRemove = () => {
         if(!url)
@@ -75,18 +59,20 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
         s3DeleteFile(url.url)
     }
 
-    const [addingFilename, setAddingFilename] = useState<string | null>(null)
+    // const [addImageModalVisible, setAddImageModalVisible] = useState<boolean>(false)
+    // const openAddImageModal = () => setAddImageModalVisible(true)
+    // const closeAddImageModal = () => setAddImageModalVisible(false)
 
     return (
         <Box>
             <Tag 
                 color={url ? "blue" : "red"} 
                 children={record.filename}
-                onClick={open}
+                onClick={openImageView}
                 style={{
                     flex: 1,
                     marginBottom:5,
-                    cursor: 'pointer'
+                    cursor: url ? 'pointer' : 'default'
                 }}
             />
             {url ? (
@@ -105,12 +91,49 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
             </>)
             :
             <>
-                <IoMdAdd size={18} />
+                {/* <IoMdAdd size={18} onClick={openAddImageModal}  />
+                <SingleImageUploader 
+                    visible={addImageModalVisible}
+                    targetFilename={record.filename}
+                    onCancel={closeAddImageModal}
+                    onOk={closeAddImageModal}
+                /> */}
             </>
             }
         </Box>
     )
     
+}
+
+export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
+    return (
+        <Box justifyContent="center">
+            {choices.map(({index, question, solution, answer}) => {
+                const content = (
+                    <Box flexDirection="column">
+                        <Text bold content={question} />
+                        <Text content={`정답: ${answer ? "O" : "X"}`} />
+                        <Text type="D2" content={solution} />
+                    </Box>
+                )
+
+                return (
+                    <Popover 
+                        key={question.slice(0,5)} 
+                        title={`${index}번 선지`} 
+                        content={content} trigger="hover"
+                    >
+                        <Tag 
+                            color="blue"
+                            children={index}
+                            style={{cursor: 'pointer'}}
+                        />
+                    </Popover>
+                )
+            }
+            )}
+        </Box>
+    )
 }
 
 export const RowDeleter = (_:any, {filename}:UploadFeatures, index: number) => {

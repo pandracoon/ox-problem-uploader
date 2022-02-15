@@ -5,14 +5,16 @@ import { Button, Select, Table, Tag } from "antd"
 import { columns } from './table-config'
 import { UploadFeatures } from "interfaces/upload-features.interface"
 import ProblemCsvReader from "./problem-uploader"
-import { useRecoilState, useResetRecoilState } from "recoil"
-import { currentSubjectState, problemSelector } from "atoms"
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
+import { currentSubjectState, imageUrlsState, problemSelector } from "atoms"
 import { ImageUploader } from "./image-uploaders/multi-image-uploader"
 import { AiOutlineCaretRight } from "react-icons/ai"
 import { DownloadOutlined } from '@ant-design/icons';
 import { ISubject } from "interfaces/subject.interface"
 import { getSubjectsApi } from "api/get-subjects.api"
 import { getChaptersApi } from "api/get-chapters.api"
+import { createProblemsApi } from "api/create-problems.api"
+import { CreateProblemInput } from "interfaces/create-problem.interface"
 
 
 const { Option } = Select;
@@ -48,6 +50,9 @@ export function Home(){
     const [bin, setBin] = useState<UploadFeatures[]>([])
     const [problems, appendProblems] = useRecoilState(problemSelector)
     const resetProblems = useResetRecoilState(problemSelector);
+    const imageUrls = useRecoilValue(imageUrlsState);
+    const resetImageUrls = useResetRecoilState(imageUrlsState)
+
     const onReset = () => {
         const ok = window.confirm("전체 문제를 삭제하시겠습니까?")
         if(!ok)
@@ -78,6 +83,39 @@ export function Home(){
     }
 
     const downloadForm = () => window.open('./문제 업로드 양식.xlsx')
+
+    const uploadProblems = () => {
+        const candidates = problems.filter(problem => problem.unit)
+
+        const ok = window.confirm(
+            problems.length === candidates.length ?
+            `${currentSubject.name} 과목 ${problems.length}개 문제를 등록하시겠습니까?`
+            :
+            `등록 불가능한 문제가 ${problems.length-candidates.length}개 있습니다. 나머지 ${candidates.length}개 문제를 등록하시겠습니까?`
+        )
+        if(!ok)
+            return;
+
+        const uploadedProblems:CreateProblemInput[] = candidates.map(
+            ({key, unit, filename, ...problem}) => {
+                if(!unit)
+                    throw Error()
+                const image = imageUrls.find(item => item.name === filename)?.url
+                const { unitId } = unit
+            return {
+                unitId,
+                image,
+                ...problem
+            }
+        })
+        createProblemsApi(uploadedProblems).then((res) => {
+            alert(`등록 요청 수: ${candidates.length}, 등록 성공 수: ${res.data.succeed}, 등록 실패 수:${res.data.fail}`)
+            resetProblems()
+            resetImageUrls()
+            window.location.reload()
+        })
+    }
+
     return (
         <Wrapper>
             <Box 
@@ -97,7 +135,16 @@ export function Home(){
                     <Button type="primary" onClick={openModal}>
                         문제 사진 업로드
                     </Button>
-                    <Button type="primary" style={{ backgroundColor: "#52C41A", border: 'none' }}>
+                    <Button 
+                        type="primary" 
+                        style={{ 
+                            backgroundColor: "#21DC6D", 
+                            border: 'none', 
+                            width:300,
+                            fontSize: 16,
+                        }}
+                        onClick={uploadProblems}
+                    >
                         전체 문제 및 사진 업로드
                     </Button>
                 </Gapbox>

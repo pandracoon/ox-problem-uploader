@@ -1,11 +1,12 @@
 
 import { Text } from "materials"
 import { GrDocumentCsv } from 'react-icons/gr'
-import { problemSelector } from 'atoms';
+import { problemSelector, useGetunit } from 'atoms';
 import { useSetRecoilState } from 'recoil';
 import CSVReader, { IFileInfo } from 'react-csv-reader';
 import { UploadFeatures } from 'interfaces/upload-features.interface';
 import styled from 'styled-components';
+import { IChoice } from "interfaces/create-problem.interface";
 
 
 const papaparseOptions = {
@@ -29,34 +30,63 @@ const Form = styled.form`
     }
 `
 
+const KorChoiceIndex = ["ㄱ","ㄴ","ㄷ","ㄹ","ㅁ","ㅂ","ㅅ"]
+const EngChoiceIndex = ["a","b","c","d","e","f","g"]
+
 export default function ProblemCsvReader(){
     const appendProblems = useSetRecoilState(problemSelector);
+    const getUnitInfo = useGetunit()
+
     const onFileLoaded= (data:string[][], fileInfo: IFileInfo, original?: File | undefined) => {
         const today = new Date()
         const keyItem = ""+today.getHours()+today.getMinutes()+today.getSeconds()
         const rawDatas = data.slice(1);
         const problems:UploadFeatures[] = rawDatas.map(
-            ([isExam, year,month,source,org,number,
-                unit,no,question,answer,answer_ratio,solution,filename], index) => {
+            ([isExam, year,month,source,org,number,unit,
+                description,correct_rate,filename, choicesNotation, ...choicesEntry], index) => {
+                const unitInfo = getUnitInfo(+unit)
+
+                const choices:IChoice[] = []
+                for (let i = 0; i < choicesEntry.length; i+=3) {
+                    const $ = Math.floor(i/3);
+                    let index;
+                    if(choicesNotation === "ko"){
+                        index = KorChoiceIndex[$]
+                    } else if(choicesNotation === "en"){
+                        index = EngChoiceIndex[$]
+                    } else {
+                        index = ""+($+1);
+                    }
+
+                    const question = choicesEntry[i].trim()
+                    if(!question)
+                        break;
+                    const answer = !!(+choicesEntry[i+1])
+                    const solution = choicesEntry[i+2].trim()
+                    choices.push({
+                        index,
+                        question,
+                        answer,
+                        solution
+                    })
+                }
+
                 return {
                     key: keyItem+index,
                     isExam: !!+isExam,
                     year:+year,
                     month:+month,
                     source: source.trim(),
-                    org,
-                    number,
-                    chapter: unit,
-                    unit,
-                    no,
-                    question: question.trim(),
-                    answer: !!+answer,
-                    answer_ratio: +answer_ratio,
-                    solution: solution.trim(),
-                    filename: filename.trim()
+                    org:org.trim(),
+                    description:description.trim(),
+                    number:number.trim(),
+                    unit: unitInfo,
+                    correct_rate: +correct_rate,
+                    filename: filename.trim(),
+                    choices
                 }
             }
-        ).filter(q => q.question)
+        ).filter(q => q.year)
         appendProblems(problems)
     }
 
