@@ -1,16 +1,16 @@
 import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import { Home } from "pages";
 
 
 const Router = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             {/* <Route path='*' element={<NotFound />} /> */}
           </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 export default Router;
