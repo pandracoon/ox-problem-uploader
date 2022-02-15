@@ -8,7 +8,7 @@ import { Box, Text } from "materials";
 import { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { s3DeleteFile } from "api/s3/\bs3deleteFile";
-import { SingleImageUploader } from "./image-uploaders/single-image-uploader";
+// import { SingleImageUploader } from "./image-uploaders/single-image-uploader";
 
 export const IsExamRenderer = (value:string, record:UploadFeatures) => {
     const { isExam } = record;

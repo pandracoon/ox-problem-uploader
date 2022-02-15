@@ -1,4 +1,4 @@
-import { ISubjectWithChapters, IUnitInfo } from "interfaces/subject.interface";
+import { ISubjectWithChapters } from "interfaces/subject.interface";
 import { atom, useRecoilValue } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { defaultSubject } from "./defaultSubject";

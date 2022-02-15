@@ -6,12 +6,6 @@ import { s3UploadFile } from "api/s3/\bs3uploadFile";
 import { UploadFile } from "antd/lib/upload/interface";
 import { s3DeleteFile } from "api/s3/\bs3deleteFile";
 
-interface UseUploadFileProps {
-    multiple?: boolean
-
-    // multiple=false 인 경우
-    filename?: string
-}
 
 export const useUploadFiles = () => {
     const { code, name } = useRecoilValue(currentSubjectState)
