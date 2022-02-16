@@ -130,18 +130,27 @@ export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
                             <>
                            <Divider style={{marginTop: 7, marginBottom: 7}}/>
                             <Box flexDirection="column"  style={{position: 'relative'}}>
-                                <Text type="D2" content={"세부 이미지: "+filename} marginBottom={5} />
-                                {image && (
-                                    <>
+                                <Text 
+                                    type="D1" 
+                                    content={"선지 이미지: "+filename} 
+                                    marginBottom={4} 
+                                />
+                                {image ? (
+                                <>
                                     <Image src={image.url}/> 
                                     <ModalClose color="#FF4D4F" onClick={onRemove} />
-                                    </>
+                                </>
+                                ) : (
+                                    <Text type="D2" content="선지 이미지를 업로드해 주세요."  color="red"/>
                                 )}
                             </Box>
                             </>
                         )}
                     </Box>
                 )
+
+                // 이미지 파일이 있는데 업로드하지 않은 경우 업로드 준비 X
+                const ready:boolean = !filename || Boolean(image)
 
                 return (
                     <Popover 
@@ -150,9 +159,9 @@ export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
                         content={content} trigger="hover"
                     >
                         <Tag 
-                            color="blue"
+                            color={ready ? "blue" : "red"}
                             children={index}
-                            style={{cursor: 'pointer'}}
+                            style={{width: 28, cursor: 'pointer'}}
                         />
                     </Popover>
                 )
