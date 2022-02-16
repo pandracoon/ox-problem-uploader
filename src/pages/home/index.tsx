@@ -76,7 +76,7 @@ export function Home(){
             alert('먼저 문제를 등록해주세요!')
             return;
         }
-        const ok = window.confirm(`먼저 과목을 확인해주세요!\n"${currentSubject}" 과목을 등록하고 있나요?`)
+        const ok = window.confirm(`먼저 과목을 확인해주세요!\n"${currentSubject.name}" 과목을 등록하고 있나요?`)
         if(!ok)
             return;
         setIsImageModalVisible(true)

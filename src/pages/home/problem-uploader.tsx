@@ -72,8 +72,8 @@ export default function ProblemCsvReader(){
 
                     const filename = choicesEntry[i+3].trim()
                     if(filename)
-                        Object.assign(choice, filename)
-                        
+                        Object.assign(choice, {filename})
+
                     choices.push(choice)
                 }
 

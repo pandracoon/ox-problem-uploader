@@ -2,12 +2,13 @@ import { UploadFeatures } from "interfaces/upload-features.interface"
 import { IoMdAdd, IoMdWarning } from "react-icons/io"
 import { problemsState, imageUrlsState } from "atoms";
 import { RiDeleteBin6Line } from "react-icons/ri"
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { Tag, Image, Popover } from "antd";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Tag, Image, Popover, Divider } from "antd";
 import { Box, Text } from "materials";
 import { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
-import { s3DeleteFile } from "api/s3/\bs3deleteFile";
+import { useDeleteImage } from "./image-uploaders/hooks";
+import styled from "styled-components";
 // import { SingleImageUploader } from "./image-uploaders/single-image-uploader";
 
 export const IsExamRenderer = (value:string, record:UploadFeatures) => {
@@ -34,8 +35,8 @@ export const UnitRenderer = (value:string, {unit}: UploadFeatures) => {
 
 
 export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
-    const setImageUrls = useSetRecoilState(imageUrlsState);
     const [Modalvisible, onVisibleChange] = useState<boolean>(false);
+    const deleteImage = useDeleteImage()
     
     const urls = useRecoilValue(imageUrlsState)
     const url = urls.find(item => item.name === record.filename)
@@ -48,15 +49,7 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
         if(!window.confirm('이미지를 삭제하시겠습니까?'))
             return;
 
-        setImageUrls(prev => {
-            const index = prev.findIndex(item => item.name === url.name);
-            if(index > -1){
-                return prev.slice(0, index).concat(prev.slice(index+1))
-            }
-            else return prev;
-        });
-
-        s3DeleteFile(url.url)
+        deleteImage(url.name, true)
     }
 
     // const [addImageModalVisible, setAddImageModalVisible] = useState<boolean>(false)
@@ -105,16 +98,48 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
     
 }
 
+const ModalClose = styled(RiDeleteBin6Line)`
+    position: absolute;
+    z-index:100;
+    right: 0;
+    font-size: 18px;
+    cursor: pointer;
+`
 export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
+    const imageUrls = useRecoilValue(imageUrlsState);
+    const deleteImage = useDeleteImage()
+    
     return (
-        <Box justifyContent="center">
+        <Box justifyContent="center" >
             {choices.map(({index, question, solution, answer, filename}) => {
+                const onRemove = () => {
+                    if(!filename)
+                        return;
+                    if(!window.confirm('이미지를 삭제하시겠습니까?'))
+                        return;
+                    deleteImage(filename, true)
+                }
+                const image = filename ? imageUrls.find(img => img.name===filename) : undefined
+
                 const content = (
-                    <Box flexDirection="column">
+                    <Box flexDirection="column" style={{width: 300}}>
                         <Text bold content={question} />
                         <Text content={`정답: ${answer ? "O" : "X"}`} />
                         <Text type="D2" content={solution} />
-                        {filename && <Text type="D2" content={"세부 이미지: "+filename} />}
+                        {filename && (
+                            <>
+                           <Divider style={{marginTop: 7, marginBottom: 7}}/>
+                            <Box flexDirection="column"  style={{position: 'relative'}}>
+                                <Text type="D2" content={"세부 이미지: "+filename} marginBottom={5} />
+                                {image && (
+                                    <>
+                                    <Image src={image.url}/> 
+                                    <ModalClose color="#FF4D4F" onClick={onRemove} />
+                                    </>
+                                )}
+                            </Box>
+                            </>
+                        )}
                     </Box>
                 )
 
@@ -138,29 +163,17 @@ export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
 }
 
 export const RowDeleter = (_:any, {filename}:UploadFeatures, index: number) => {
-    const [imageUrls, setImageUrls] = useRecoilState(imageUrlsState);
-    const [problems, setProblems] = useRecoilState(problemsState)
-    const filenames = problems.map(p => p.filename)
-
-    // 그림파일을 등록했으면서 다른 파일이 그림을 공유하는 경우, 그림을 삭제하면 안 됨
-    // 그 외의 경우는 삭제 가능
-    const isImageNeeded = imageUrls.findIndex(f => f.name === filename) && 
-        filenames.indexOf(filename) !== filenames.lastIndexOf(filename)
-
+    const setProblems = useSetRecoilState(problemsState)
+    const deleteImage = useDeleteImage()
     const onDelete = () => {
-        if(!isImageNeeded){
-            // name - url map과 s3 상 파일 모두 제거
-            setImageUrls(prev => {
-                const index = prev.findIndex(item => item.name === filename);
-                if(index > -1){
-                    s3DeleteFile(prev[index].url)
-                    return prev.slice(0, index).concat(prev.slice(index+1))
-                }
-                else return prev;
-            });
-        }
-
-        setProblems(prev => prev.slice(0, index).concat(prev.slice(index+1)))
+        deleteImage(filename, false)
+            .then(() => {
+                // 문제 리스트에서 삭제
+                setProblems(prev => (
+                    prev.slice(0, index)
+                        .concat(prev.slice(index+1))
+                ))
+            })
     }
     return (
       <RiDeleteBin6Line onClick={onDelete} color="#FF4D4F" size={20} />

@@ -1,5 +1,4 @@
-import { IoImageOutline } from "react-icons/io5"
-import { Button, Modal, Upload, ModalProps } from "antd"
+import { Modal, Upload, ModalProps } from "antd"
 import { Box, Text } from "materials"
 import { useUploadFiles } from "./hooks"
 import { UploadButton } from "./upload-button"
@@ -21,9 +20,6 @@ export const ImageUploader = ({...props}: ModalProps) => {
                 beforeUpload={handleFiles}
                 customRequest={customRequest}
                 onRemove={remove}
-                showUploadList={{
-                    removeIcon: null
-                }}
             >
                 <UploadButton />
             </Upload>
