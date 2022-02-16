@@ -98,7 +98,7 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
     
 }
 
-const ModalClose = styled(RiDeleteBin6Line)`
+const RemoveIcon = styled(RiDeleteBin6Line)`
     position: absolute;
     z-index:100;
     right: 0;
@@ -138,7 +138,7 @@ export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
                                 {image ? (
                                 <>
                                     <Image src={image.url}/> 
-                                    <ModalClose color="#FF4D4F" onClick={onRemove} />
+                                    <RemoveIcon color="#FF4D4F" onClick={onRemove} />
                                 </>
                                 ) : (
                                     <Text type="D2" content="선지 이미지를 업로드해 주세요."  color="red"/>
