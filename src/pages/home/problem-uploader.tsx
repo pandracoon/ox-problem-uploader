@@ -47,7 +47,7 @@ export default function ProblemCsvReader(){
                 const unitInfo = getUnitInfo(+unit)
 
                 const choices:ChoiceUploadFeatures[] = []
-                for (let i = 0; i < choicesEntry.length; i+=4) {
+                for (let i = 0; i < choicesEntry.length; i+=5) {
                     const $ = Math.floor(i/3);
                     let index;
                     if(choicesNotation === "ko"){
@@ -71,8 +71,9 @@ export default function ProblemCsvReader(){
                     }
 
                     const filename = choicesEntry[i+3].trim()
+                    const choice_description = choicesEntry[i+4].trim()
                     if(filename)
-                        Object.assign(choice, {filename})
+                        Object.assign(choice, {filename, description: choice_description})
 
                     choices.push(choice)
                 }
