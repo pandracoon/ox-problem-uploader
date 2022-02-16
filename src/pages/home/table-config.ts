@@ -50,7 +50,7 @@ export const columns: ColumnsType<UploadFeatures> = [
     }, 
     {
       title: '대단원',
-      dataIndex: 'chapter',
+      dataIndex: 'unit',
       key: 'chapter',
       ellipsis: true,
       width: 150,
@@ -58,7 +58,7 @@ export const columns: ColumnsType<UploadFeatures> = [
     },
     {
       title: '소단원',
-      dataIndex: 'chapter',
+      dataIndex: 'unit',
       key: 'unit',
       ellipsis: true,
       width: 150,

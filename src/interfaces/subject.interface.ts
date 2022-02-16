@@ -24,8 +24,11 @@ export interface ISubjectWithChapters {
 }
 
 export interface IUnitInfo {
-    chapter: string
-    chapterId: number
-    unit: string
-    unitId: number
+    info?: {
+        chapter: string
+        chapterId: number
+        unit: string
+        unitId: number
+    }
+    unitIndex: number
 }

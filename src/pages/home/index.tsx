@@ -5,8 +5,8 @@ import { Button, Select, Table, Tag } from "antd"
 import { columns } from './table-config'
 import { UploadFeatures } from "interfaces/upload-features.interface"
 import ProblemCsvReader from "./problem-uploader"
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
-import { currentSubjectState, imageUrlsState, problemSelector } from "atoms"
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
+import { currentSubjectState, imageUrlsState, problemSelector, problemsState, useGetunit } from "atoms"
 import { ImageUploader } from "./image-uploaders/multi-image-uploader"
 import { AiOutlineCaretRight } from "react-icons/ai"
 import { DownloadOutlined } from '@ant-design/icons';
@@ -15,6 +15,7 @@ import { getSubjectsApi } from "api/get-subjects.api"
 import { getChaptersApi } from "api/get-chapters.api"
 import { createProblemsApi } from "api/create-problems.api"
 import { CreateProblemInput } from "interfaces/create-problem.interface"
+import produce from "immer"
 
 
 const { Option } = Select;
@@ -32,8 +33,10 @@ const Gapbox = styled.div`
 `
 
 export function Home(){
+    const setProblems = useSetRecoilState(problemsState)
     const [subjectsList, setSubjectsList] = useState<Omit<ISubject, 'chapters'>[]>([])
     const [currentSubject, setSubject] = useRecoilState(currentSubjectState)
+    const getUnitInfo = useGetunit()
     
     // subject 목록 받아오기
     useEffect(() => {
@@ -43,8 +46,22 @@ export function Home(){
 
     const selectSubject = (code: string) => {
         getChaptersApi(code)
-            .then(res => setSubject(res.data))
+            .then(res => {setSubject(res.data)})
     }
+    
+    useEffect(() => {
+        // 선택 과목 변경 시 문제 대단원, 소단원 정보 최신화
+        setProblems( 
+            produce(
+                (draft) => {
+                for (const problem of draft) {
+                    const unitInfo = getUnitInfo(problem.unit.unitIndex)
+                    problem.unit=unitInfo                       
+                }
+            })
+        )
+            
+    }, [currentSubject.code])
 
     // 문제 휴지통
     const [bin, setBin] = useState<UploadFeatures[]>([])
@@ -85,7 +102,7 @@ export function Home(){
     const downloadForm = () => window.open('./문제 업로드 양식.xlsx')
 
     const uploadProblems = () => {
-        const candidates = problems.filter(problem => problem.unit)
+        const candidates = problems.filter(problem => problem.unit.info)
 
         const ok = window.confirm(
             problems.length === candidates.length ?
@@ -98,10 +115,10 @@ export function Home(){
 
         const uploadedProblems:CreateProblemInput[] = candidates.map(
             ({key, unit, filename, ...problem}) => {
-                if(!unit)
+                if(!unit.info)
                     throw Error()
                 const image = imageUrls.find(item => item.name === filename)?.url
-                const { unitId } = unit
+                const { unitId } = unit.info
             return {
                 unitId,
                 image,

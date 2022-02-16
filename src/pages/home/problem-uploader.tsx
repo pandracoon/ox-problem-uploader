@@ -47,8 +47,9 @@ export default function ProblemCsvReader(){
                 const unitInfo = getUnitInfo(+unit)
 
                 const choices:ChoiceUploadFeatures[] = []
-                for (let i = 0; i < choicesEntry.length; i+=5) {
-                    const $ = Math.floor(i/3);
+                const ENTRY_LENGTH = 5;
+                for (let i = 0; i < choicesEntry.length; i+=ENTRY_LENGTH) {
+                    const $ = Math.floor(i/ENTRY_LENGTH);
                     let index;
                     if(choicesNotation === "ko"){
                         index = KorChoiceIndex[$]

@@ -1,4 +1,4 @@
-import { ISubjectWithChapters } from "interfaces/subject.interface";
+import { ISubjectWithChapters, IUnitInfo } from "interfaces/subject.interface";
 import { atom, useRecoilValue } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { defaultSubject } from "./defaultSubject";
@@ -15,20 +15,23 @@ export const currentSubjectState = atom<ISubjectWithChapters>({
 // 소단원 숫자를 통해 단원 전체 정보 얻음
 export const useGetunit = () => {
     const {chapters} = useRecoilValue(currentSubjectState)
-    const getter = (index: number) => {
+    const getter = (index: number):IUnitInfo => {
         const targetChapter = chapters.find(ch => ch.units.findIndex(u => +u.index === +index) > -1)
         if(!targetChapter)
-            return null;
+            return { unitIndex: index };
             
         const unitInfo =  targetChapter.units.find(u => +u.index === +index)
         if(!unitInfo)
-            return null;
-    
+            return { unitIndex: index };
+        
         return {
-            chapter: targetChapter.title,
-            chapterId: targetChapter.id,
-            unit: unitInfo.title,
-            unitId: unitInfo.id
+            info: {
+                chapter: targetChapter.title,
+                chapterId: targetChapter.id,
+                unit: unitInfo.title,
+                unitId: unitInfo.id,
+            },
+            unitIndex: index
         }
     }
     return getter

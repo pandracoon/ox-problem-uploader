@@ -27,8 +27,7 @@ export interface UploadFeatures {
     number: string
 
  // 소단원
-    unit: IUnitInfo | null
-
+    unit: IUnitInfo
  // 자료설명
     description: string
  

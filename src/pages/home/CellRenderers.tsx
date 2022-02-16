@@ -23,12 +23,12 @@ export const IsExamRenderer = (value:string, record:UploadFeatures) => {
 }
 
 export const ChapterRenderer = (value:string, {unit}:UploadFeatures) => {
-    return unit ? unit.chapter : (
+    return unit.info ? unit.info.chapter : (
         <IoMdWarning color="#FF4D4F" size={18} />
     )
 }
 export const UnitRenderer = (value:string, {unit}: UploadFeatures) => {
-    return unit ? unit.unit  : (
+    return unit.info ? unit.info.unit  : (
         <IoMdWarning color="#FF4D4F" size={18} />
     )
 }
