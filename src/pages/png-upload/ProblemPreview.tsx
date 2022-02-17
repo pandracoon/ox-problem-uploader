@@ -1,10 +1,12 @@
-import { Input, InputNumber, Select, Switch } from "antd"
+import { Button, Input, InputNumber, Select, Switch } from "antd"
 import { currentSubjectState } from "atoms"
 import { examPNGProblemsState, useSetProblem, useSetUnitinfo } from "atoms/pngPhotos"
 import { ISource } from "interfaces/source.interface"
 import { Box, Text } from "materials"
-import { useCallback, useMemo, useState } from "react"
+import { ChangeEvent, useCallback, useMemo, useState } from "react"
 import { useRecoilValue } from "recoil"
+import { gccTextDetection } from "utils/gcc-text-detection"
+import { getCroppedImg } from "utils/getCroppedImg"
 import { ChoicesEditor } from "./ChoicesEditor"
 import { ImageWithCropper } from "./ImageWithCropper"
 
@@ -16,7 +18,7 @@ interface ProblemPreviewProps {
 }
 
 export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps) => {
-    const {index:problem_real_index, description, correct_rate} = useRecoilValue(examPNGProblemsState)[index]
+    const {index:problem_real_index, description, correct_rate, photo} = useRecoilValue(examPNGProblemsState)[index]
     const currentSubject = useRecoilValue(currentSubjectState)
     const intro = useMemo(() => `${year} ${alias} ${currentSubject.name}, ${problem_real_index}번`,[year])
     
@@ -33,6 +35,15 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
     const setProblemGetter = useSetProblem()
     const {setDescription, setCorrectRate} = setProblemGetter(index)
 
+    const [detectedText, setDetectedText] = useState<string>("")
+    const onTextDetection = async () => {
+        const url = await getCroppedImg(photo)
+        const text = await gccTextDetection(url)
+        setDetectedText(text)
+    }
+    const onTextChange = ({target:{value}}:ChangeEvent<HTMLTextAreaElement>) => {
+        setDetectedText(value)
+    }
 
     return (
         <Box>
@@ -85,11 +96,24 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                     </Box>
                 </Box>
                 
-                <Box marginTop={8}>
+                <Box marginVertical={8}>
                     <Input.TextArea
                         placeholder="자료 해설"
                         value={description}
                         onChange={setDescription}
+                    />
+                </Box>
+
+                <Button color="primary" onClick={onTextDetection}>
+                    현재 선택 이미지에서 텍스트 추출
+                </Button>
+
+                <Box marginVertical={8}>
+                    <Input.TextArea
+                        placeholder="텍스트 추출 결과"
+                        value={detectedText}
+                        onChange={onTextChange}
+                        autoSize={{minRows:5}}
                     />
                 </Box>
                

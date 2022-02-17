@@ -52,7 +52,6 @@ export function PNGUpload(){
         setExam(prev => exams.find(ex => ex.alias===alias) || prev)
     }
 
-
     const navigate = useNavigate()
     const toHome = () => navigate('/')
     const toConvertPDF2PNG = () => window.open('https://pdf2png.com/ko/')
