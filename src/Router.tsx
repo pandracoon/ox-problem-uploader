@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, HashRouter } from "react-router-dom";
-import { Home } from "pages";
+import { Home, NotFound, PdfUpload } from "pages";
 
 
 const Router = () => {
@@ -8,7 +8,8 @@ const Router = () => {
     <HashRouter>
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* <Route path='*' element={<NotFound />} /> */}
+            <Route path="/pdf" element={<PdfUpload />} />
+            <Route path='*' element={<NotFound />} />
           </Routes>
     </HashRouter>
   );

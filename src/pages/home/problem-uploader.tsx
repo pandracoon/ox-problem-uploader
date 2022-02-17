@@ -6,7 +6,6 @@ import { useSetRecoilState } from 'recoil';
 import CSVReader, { IFileInfo } from 'react-csv-reader';
 import { ChoiceUploadFeatures, UploadFeatures } from 'interfaces/upload-features.interface';
 import styled from 'styled-components';
-import { IChoice } from "interfaces/create-problem.interface";
 
 
 const papaparseOptions = {

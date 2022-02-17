@@ -16,6 +16,7 @@ import { getChaptersApi } from "api/get-chapters.api"
 import { createProblemsApi } from "api/create-problems.api"
 import { CreateProblemInput } from "interfaces/create-problem.interface"
 import produce from "immer"
+import { useNavigate } from "react-router-dom"
 
 
 const { Option } = Select;
@@ -37,6 +38,7 @@ export function Home(){
     const [subjectsList, setSubjectsList] = useState<Omit<ISubject, 'chapters'>[]>([])
     const [currentSubject, setSubject] = useRecoilState(currentSubjectState)
     const getUnitInfo = useGetunit()
+    const navigate = useNavigate()
     
     // subject 목록 받아오기
     useEffect(() => {
@@ -70,6 +72,8 @@ export function Home(){
     const imageUrls = useRecoilValue(imageUrlsState);
     const resetImageUrls = useResetRecoilState(imageUrlsState)
 
+
+    const toPdf = () => navigate('/pdf')
     const onReset = () => {
         const ok = window.confirm("전체 문제를 삭제하시겠습니까?")
         if(!ok)
@@ -140,7 +144,13 @@ export function Home(){
                 alignItems="center"
                 marginBottom={24} 
             >
-                <Text type="H1" content="문제 업로드" />
+                <Box alignItems="center">
+                    <Text type="H1" content="문제 업로드" marginRight={18} />
+                    <Button type="link" >
+                    {/* <Button type="link" onClick={toPdf}> */}
+                        pdf로 추가하기(베타 버전)
+                    </Button>
+                </Box>
                 <Gapbox>
                     <ProblemCsvReader />
                     <Button type="primary" danger onClick={onReset}>
