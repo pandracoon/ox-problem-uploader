@@ -1,6 +1,6 @@
-import { Area } from "react-easy-crop/types";
+import { Crop } from 'react-image-crop'
 
-export function getCroppedImg(src: string, crop:Area):Promise<string> {
+export function getCroppedImg(src: string, crop:Crop):Promise<string> {
     const image = new Image()
     image.src = src;
     const canvas = document.createElement("canvas"); // document 상에 canvas 태그 생성

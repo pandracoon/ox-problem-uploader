@@ -6,7 +6,7 @@ import { columns } from './table-config'
 import { UploadFeatures } from "interfaces/upload-features.interface"
 import ProblemCsvReader from "./problem-uploader"
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
-import { currentSubjectState, imageUrlsState, problemSelector, problemsState, useGetunit } from "atoms"
+import { currentSubjectState, imageUrlsState, problemSelector, problemsState, subjectsListState, useGetunit } from "atoms"
 import { ImageUploader } from "./image-uploaders/multi-image-uploader"
 import { AiOutlineCaretRight } from "react-icons/ai"
 import { DownloadOutlined } from '@ant-design/icons';
@@ -35,7 +35,7 @@ const Gapbox = styled.div`
 
 export function Home(){
     const setProblems = useSetRecoilState(problemsState)
-    const [subjectsList, setSubjectsList] = useState<Omit<ISubject, 'chapters'>[]>([])
+    const [subjectsList, setSubjectsList] = useRecoilState(subjectsListState)
     const [currentSubject, setSubject] = useRecoilState(currentSubjectState)
     const getUnitInfo = useGetunit()
     const navigate = useNavigate()
@@ -73,7 +73,7 @@ export function Home(){
     const resetImageUrls = useResetRecoilState(imageUrlsState)
 
 
-    const toPdf = () => navigate('/pdf')
+    const toPNG = () => navigate('/png')
     const onReset = () => {
         const ok = window.confirm("전체 문제를 삭제하시겠습니까?")
         if(!ok)
@@ -146,9 +146,9 @@ export function Home(){
             >
                 <Box alignItems="center">
                     <Text type="H1" content="문제 업로드" marginRight={18} />
-                    <Button type="link" >
-                    {/* <Button type="link" onClick={toPdf}> */}
-                        pdf로 추가하기(베타 버전)
+                    {/* <Button type="link" > */}
+                    <Button type="link" onClick={toPNG}>
+                        시험 이미지 파일로 추가하기(베타 버전)
                     </Button>
                 </Box>
                 <Gapbox>
@@ -192,7 +192,7 @@ export function Home(){
                 <Gapbox style={{marginBottom: 18, alignSelf: "center"}}>
                     <Text type="P1" bold content="과목 선택" />
                     <Select 
-                        defaultValue={currentSubject.code} 
+                        value={currentSubject.code} 
                         style={{ width: 120 }} 
                         onChange={selectSubject}>
                         {subjectsList.map((s) => (

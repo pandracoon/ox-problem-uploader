@@ -1,13 +1,17 @@
-import { ISubjectWithChapters, IUnitInfo } from "interfaces/subject.interface";
+import { ISubject, ISubjectWithChapters, IUnitInfo } from "interfaces/subject.interface";
 import { atom, useRecoilValue } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { defaultSubject } from "./defaultSubject";
 
 const { persistAtom } = recoilPersist()
 
+export const subjectsListState = atom<Omit<ISubject, 'chapters'>[]>({
+    key: 'subjects/list',
+    default: [defaultSubject]
+})
 
 export const currentSubjectState = atom<ISubjectWithChapters>({
-    key: 'subjects/name',
+    key: 'subjects/current',
     default: defaultSubject,
     effects_UNSTABLE: [persistAtom],
 })

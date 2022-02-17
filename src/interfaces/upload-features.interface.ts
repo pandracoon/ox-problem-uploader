@@ -28,6 +28,7 @@ export interface UploadFeatures {
 
  // 소단원
     unit: IUnitInfo
+    
  // 자료설명
     description: string
  

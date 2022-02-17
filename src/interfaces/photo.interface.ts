@@ -1,6 +1,6 @@
 import { Crop } from 'react-image-crop'
 
-export interface Photo {
+export interface IPhoto {
     url:string
     crop: Crop
     width: number

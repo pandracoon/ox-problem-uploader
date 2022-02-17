@@ -1,3 +1,3 @@
 export { Home } from './home';
-export { PNGUpload as PdfUpload } from './png-upload';
+export { PNGUpload } from './png-upload';
 export { NotFound } from './NotFound';

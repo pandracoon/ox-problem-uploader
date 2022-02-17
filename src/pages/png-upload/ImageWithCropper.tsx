@@ -1,7 +1,6 @@
 import { Modal } from 'antd'
-import { examPNGPhotosState, useSetCrop } from 'atoms/pngPhotos'
-import { Photo } from 'interfaces/photo.interface'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { examPNGProblemsState, useSetCrop } from 'atoms/pngPhotos'
+import { useEffect, useRef, useState } from 'react'
 import ReactCrop, { Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import { useRecoilValue } from 'recoil'
@@ -16,10 +15,10 @@ const ImageContainer = styled.div`
     }
 `
 
-const MAX_WIDTH = 360;
+const MAX_WIDTH = 480;
 
 export const ImageWithCropper = ({index}:ImageWithCropperProps) => {
-    const {url, crop, width, height} = useRecoilValue(examPNGPhotosState)[index]
+    const {url, crop, width, height} = useRecoilValue(examPNGProblemsState)[index].photo
     const imageRef = useRef<HTMLImageElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -54,7 +53,6 @@ export const ImageWithCropper = ({index}:ImageWithCropperProps) => {
     const closeModal = () => {
         setCrop(index, tempCrop)
         setVisible(false);
-        console.log(tempCrop)
     }
 
 
@@ -72,7 +70,8 @@ export const ImageWithCropper = ({index}:ImageWithCropperProps) => {
                 height={HEIGHT}
                 onClick={openModal}
             />
-            <Modal title="이미지 자르기" visible={visible} onCancel={closeModal} onOk={closeModal}>
+            <Modal
+                title="이미지 자르기" visible={visible} onCancel={closeModal} onOk={closeModal}>
                 <ReactCrop src={url} crop={tempCrop} onChange={onChange} />
                 {/* <ReactCrop src={url} crop={tempCrop} onChange={setTempCrop} /> */}
             </Modal>
