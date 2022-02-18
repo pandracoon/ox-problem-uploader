@@ -43,7 +43,7 @@ export function PNGUpload(){
     useEffect(() => {
         getSubjectsApi()
             .then(res => setSubjectsList(res.data))
-    },[])
+    },[setSubjectsList])
     const selectSubject = (code: string) => {
         getChaptersApi(code)
             .then(res => setSubject(res.data))

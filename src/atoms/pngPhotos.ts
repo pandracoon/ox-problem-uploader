@@ -1,5 +1,5 @@
-import { ChangeEvent, useCallback, useState } from "react";
-import { atom, useRecoilState, useSetRecoilState } from "recoil";
+import { ChangeEvent, useCallback } from "react";
+import { atom, useSetRecoilState } from "recoil";
 import { Crop } from 'react-image-crop';
 import produce from "immer";
 import { EXAM_ROUTINES } from "data/exam-routines";
@@ -37,11 +37,6 @@ export const useReadImages = () => {
                 img.src=url;
                 img.onload = function(){
                     const {width, height} = img
-                    const {page, ...crop_props} = EXAM_ROUTINES[4]
-                    const crop:Crop = {
-                        unit: "%",
-                        ...crop_props
-                    }
                     setPhotos(prev => {
                         const problems:PNGUploadProblemFeature[] = EXAM_ROUTINES
                             .filter(({page}) => page === pageNo)
@@ -118,13 +113,13 @@ interface SetProblemProps {
 
 export const useSetProblem = () => {
     const _setProblem = useSetRecoilState(examPNGProblemsState)
-    const setProblem = (problem_index: number, newData:SetProblemProps) => {
+    const setProblem = useCallback( (problem_index: number, newData:SetProblemProps) => {
         _setProblem(
             produce(draft => {
                 draft[problem_index] = {...draft[problem_index], ...newData}
             })
         )
-    }
+    },[_setProblem])
 
     const getSetters = useCallback((problem_index: number) => {
         const setDescription = ({target:{value}}: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
@@ -135,7 +130,7 @@ export const useSetProblem = () => {
             setDescription,
             setCorrectRate,
         }
-    },[])
+    },[setProblem])
     return getSetters
 }
 
@@ -163,7 +158,7 @@ export const useResetChoices = () => {
 
 export const useSetChoices = () => {
     const _setProblem = useSetRecoilState(examPNGProblemsState)
-    const _setChoices = (problem_index: number, choice_index: string, newChoices:Partial<PNGUploadChoice>) => {
+    const _setChoices = useCallback((problem_index: number, choice_index: string, newChoices:Partial<PNGUploadChoice>) => {
         _setProblem(
             produce(draft => {
                 const chIdx = draft[problem_index].choices.findIndex(ch => ch.index === choice_index)
@@ -173,7 +168,7 @@ export const useSetChoices = () => {
                 draft[problem_index].choices[chIdx] = {...ch, ...newChoices}
             })
         )
-    }
+    },[_setProblem])
 
 
 
@@ -204,6 +199,6 @@ export const useSetChoices = () => {
             setPhoto,
             setDescription
         }
-    },[])
+    },[_setChoices])
     return getSetters
 }

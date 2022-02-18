@@ -46,7 +46,7 @@ export const ChoicesEditor = ({index:problem_index, isKor}:ChoicesEditorProps) =
                     }
                 })
             )
-    },[])
+    },[photo])
     // modal에서 crop onChange하는 경우
     const onCropChange = (_:Crop, crop: Crop) => {
         setTempPhoto(prev => ({...prev, crop}))

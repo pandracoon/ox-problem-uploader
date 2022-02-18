@@ -29,9 +29,9 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
     
     // unit select
     const _setUnitinfo = useSetUnitinfo()
-    const setUnitinfo = useCallback((unit_index:number) => _setUnitinfo(index, unit_index),[])
+    const setUnitinfo = useCallback((unit_index:number) => _setUnitinfo(index, unit_index),[_setUnitinfo, index])
     
-    const units = useMemo(() => currentSubject.chapters.map(ch => ch.units).flat(), [currentSubject.code])
+    const units = useMemo(() => currentSubject.chapters.map(ch => ch.units).flat(), [currentSubject.chapters])
 
     // 선지 종류
     const [isKor, setIsKor] = useState<boolean>(true)
