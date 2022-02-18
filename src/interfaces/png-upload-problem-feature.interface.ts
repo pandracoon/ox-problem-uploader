@@ -2,6 +2,10 @@ import { IChoice } from "./create-problem.interface";
 import { IPhoto } from "./photo.interface";
 import { IUnitInfo } from "./subject.interface";
 
+export interface PNGUploadChoice extends Omit<IChoice, "image"> {
+    photo?: IPhoto
+}
+
 export interface PNGUploadProblemFeature {
     index: number
     photo: IPhoto
@@ -15,5 +19,5 @@ export interface PNGUploadProblemFeature {
     correct_rate: number
     
     //  선지
-    choices: IChoice[]
+    choices: PNGUploadChoice[]
 }

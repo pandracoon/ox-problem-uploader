@@ -6,7 +6,13 @@ interface GetCroppedImgProps {
     height: number
     crop:Crop
 }
-export function getCroppedImg({url, width, height, crop}:GetCroppedImgProps):Promise<string> {
+
+interface CroppedImg {
+    url: string
+    width: number
+    height: number
+}
+export function getCroppedImg({url, width, height, crop}:GetCroppedImgProps):Promise<CroppedImg> {
     const X = width * crop.x / 100,
         Y = height * crop.y / 100,
         WIDTH = width * crop.width / 100,
@@ -40,7 +46,11 @@ export function getCroppedImg({url, width, height, crop}:GetCroppedImgProps):Pro
                 WIDTH, // 캔버스에서 이미지 가로 길이
                 HEIGHT //  캔버스에서 이미지 세로 길이
               );
-            resolve(canvas.toDataURL());
+            resolve({
+                url: canvas.toDataURL(),
+                width: WIDTH,
+                height: HEIGHT
+            });
         }
     });
 }

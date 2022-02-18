@@ -15,7 +15,7 @@ const ImageContainer = styled.div`
     }
 `
 
-const MAX_WIDTH = 480;
+const MAX_WIDTH = 420;
 
 export const ImageWithCropper = ({index}:ImageWithCropperProps) => {
     const {url, crop, width, height} = useRecoilValue(examPNGProblemsState)[index].photo

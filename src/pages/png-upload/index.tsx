@@ -46,7 +46,7 @@ export function PNGUpload(){
     },[])
     const selectSubject = (code: string) => {
         getChaptersApi(code)
-            .then(res => {setSubject(res.data)})
+            .then(res => setSubject(res.data))
     }
     const selectExam = (alias: string) => {
         setExam(prev => exams.find(ex => ex.alias===alias) || prev)

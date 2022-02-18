@@ -129,12 +129,16 @@ export function Home(){
                 ...problem
             }
         })
-        createProblemsApi(uploadedProblems).then((res) => {
-            alert(`등록 요청 수: ${candidates.length}, 등록 성공 수: ${res.data.succeed}, 등록 실패 수:${res.data.fail}`)
-            resetProblems()
-            resetImageUrls()
-            window.location.reload()
-        })
+        createProblemsApi(currentSubject.code, uploadedProblems)
+            .then((res) => {
+                alert(`등록 요청 수: ${candidates.length}, 등록 성공 수: ${res.data.succeed}, 등록 실패 수:${res.data.fail}`)
+                resetProblems()
+                resetImageUrls()
+                window.location.reload()
+            }).catch((e) => {
+                console.log(e.response.data)
+                alert('다시 시도해 주세요.')
+            })
     }
 
     return (

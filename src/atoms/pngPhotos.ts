@@ -1,11 +1,12 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import { atom, useSetRecoilState } from "recoil";
+import { atom, useRecoilState, useSetRecoilState } from "recoil";
 import { Crop } from 'react-image-crop';
 import produce from "immer";
 import { EXAM_ROUTINES } from "data/exam-routines";
-import { PNGUploadProblemFeature } from "interfaces/png-upload-problem-feature.interface";
+import { PNGUploadChoice, PNGUploadProblemFeature } from "interfaces/png-upload-problem-feature.interface";
 import { useGetunit } from "./subject";
 import { IChoice } from "interfaces/create-problem.interface";
+import { IPhoto } from "interfaces/photo.interface";
 
 
 export const examPNGProblemsState = atom<PNGUploadProblemFeature[]>({
@@ -68,6 +69,20 @@ export const useReadImages = () => {
         })
     }
     return readImages
+}
+
+export const useRemoveProblem = () => {
+    const setProblem = useSetRecoilState(examPNGProblemsState)
+    const removeProblem = (problem_index: number) => {
+        if(!window.confirm('문제를 삭제하시겠습니까?\n삭제된 문제는 복구할 수 없습니다.'))
+            return;
+        setProblem(
+            produce(draft => {
+                draft.splice(problem_index, 1)
+            })
+        )
+    }
+    return removeProblem
 }
 
 export const useSetCrop = () => {
@@ -148,7 +163,7 @@ export const useResetChoices = () => {
 
 export const useSetChoices = () => {
     const _setProblem = useSetRecoilState(examPNGProblemsState)
-    const _setChoices = (problem_index: number, choice_index: string, newChoices:Partial<IChoice>) => {
+    const _setChoices = (problem_index: number, choice_index: string, newChoices:Partial<PNGUploadChoice>) => {
         _setProblem(
             produce(draft => {
                 const chIdx = draft[problem_index].choices.findIndex(ch => ch.index === choice_index)
@@ -160,18 +175,25 @@ export const useSetChoices = () => {
         )
     }
 
+
+
     const getSetters = useCallback((problem_index: number) => {
         const setQuestion = (choice_index: string) =>
              ({target:{value}}: ChangeEvent<HTMLInputElement>) => 
                 _setChoices(problem_index, choice_index, {question: value})
+        
         const setAnswer = (choice_index: string) => (answer: boolean) => 
                 _setChoices(problem_index, choice_index, {answer})
+        
         const setSolution = (choice_index: string) =>
              ({target:{value}}: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
                 _setChoices(problem_index, choice_index, {solution: value})
-        const setImage = (choice_index: string) =>
-             ({target:{value}}: ChangeEvent<HTMLInputElement>) => 
-                _setChoices(problem_index, choice_index, {image: value})
+        
+        
+        const setPhoto = (choice_index: string, photo:IPhoto | undefined) =>  {
+            _setChoices(problem_index, choice_index, {photo})
+        }
+        
         const setDescription = (choice_index: string) =>
              ({target:{value}}: ChangeEvent<HTMLInputElement>) => 
                 _setChoices(problem_index, choice_index, {description: value})
@@ -179,7 +201,7 @@ export const useSetChoices = () => {
             setQuestion,
             setAnswer,
             setSolution,
-            setImage,
+            setPhoto,
             setDescription
         }
     },[])

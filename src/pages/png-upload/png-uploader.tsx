@@ -6,6 +6,7 @@ import { useReadImages } from "atoms/pngPhotos";
 
 const Form = styled.form`
     display: flex;
+    margin-right: 12px;
     padding: 4px 0;
     :hover {
         background-color: #eee;
