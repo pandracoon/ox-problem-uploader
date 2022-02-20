@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/ox-problem-uploader/static/css/main.d684f547.css",
-    "main.js": "/ox-problem-uploader/static/js/main.56eda0c0.js",
-    "index.html": "/ox-problem-uploader/index.html",
-    "main.d684f547.css.map": "/ox-problem-uploader/static/css/main.d684f547.css.map",
-    "main.56eda0c0.js.map": "/ox-problem-uploader/static/js/main.56eda0c0.js.map"
+    "main.css": "/static/css/main.d684f547.css",
+    "main.js": "/static/js/main.c0e5f3cd.js",
+    "index.html": "/index.html",
+    "main.d684f547.css.map": "/static/css/main.d684f547.css.map",
+    "main.c0e5f3cd.js.map": "/static/js/main.c0e5f3cd.js.map"
   },
   "entrypoints": [
     "static/css/main.d684f547.css",
-    "static/js/main.56eda0c0.js"
+    "static/js/main.c0e5f3cd.js"
   ]
 }
