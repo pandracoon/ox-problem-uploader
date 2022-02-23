@@ -51,6 +51,7 @@ export const ImageWithCropper = ({index}:ImageWithCropperProps) => {
     const [tempCrop, setTempCrop] = useState<Crop>(crop);
     const onChange = (_:Crop, crop:Crop) => setTempCrop(crop)
     const closeModal = () => {
+
         setCrop(index, tempCrop)
         setVisible(false);
     }

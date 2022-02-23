@@ -1,5 +1,6 @@
-import { Button, Divider, Input, Switch, Tag } from "antd"
+import { Button, Divider, Input, Select, Switch, Tag } from "antd"
 import Modal from "antd/lib/modal/Modal"
+import { useGetUnitListofCurrentSubject } from "atoms"
 import { examPNGProblemsState, useResetChoices, useSetChoices } from "atoms/pngPhotos"
 import { IPhoto } from "interfaces/photo.interface"
 import { Box, Text } from "materials"
@@ -12,9 +13,10 @@ interface ChoicesEditorProps {
     index: number
     isKor: boolean
 }
+const { Option } = Select;
 
 export const ChoicesEditor = ({index:problem_index, isKor}:ChoicesEditorProps) => {
-    const {choices, photo} = useRecoilValue(examPNGProblemsState)[problem_index]
+    const {choices, photo, useImage} = useRecoilValue(examPNGProblemsState)[problem_index]
     const resetChoices = useResetChoices()
     const getSetter = useSetChoices()
     const {
@@ -22,9 +24,11 @@ export const ChoicesEditor = ({index:problem_index, isKor}:ChoicesEditorProps) =
         setAnswer,
         setSolution,
         setPhoto,
-        setDescription
+        setDescription,
+        setUnitinfo
     } = getSetter(problem_index)
 
+    const units = useGetUnitListofCurrentSubject()
 
     useEffect(() => {
         resetChoices(problem_index, isKor)
@@ -89,11 +93,29 @@ export const ChoicesEditor = ({index:problem_index, isKor}:ChoicesEditorProps) =
             {choices.map(({index, question, answer, solution, description, photo}, i) => (
                 <Fragment key={i}>
                 <Box flexDirection="column" key={"choice"+i}>
+                    {/* 단원 선택 */}
                     <Box alignItems="center">
                         <Tag
                             color="geekblue"
                             children={index+"."}
                         />
+                        <Text type="P1" content="소단원" marginHorizontal={6} marginBottom={4} /> 
+                        <Select
+                            showSearch
+                            filterOption={(input, option) => option?.includes(input)}
+                            onChange={setUnitinfo}
+                            placeholder="단원을 선택해주세요."
+                            style={{width: 200}}
+                        >
+                            {units.map((unit) => (
+                                <Option value={unit.index} children={unit.title} key={unit.id} />
+                            ))}
+                        </Select>
+                    </Box>
+
+
+                    {/* 문제(선지 내용) */}
+                    <Box alignItems="center" marginTop={12}>
                         <Input
                             placeholder="선지 내용"
                             value={question}
@@ -133,6 +155,7 @@ export const ChoicesEditor = ({index:problem_index, isKor}:ChoicesEditorProps) =
                             style={{marginLeft: 10}} 
                             onClick={openPhotoModal(index)} 
                             type={photo ? "default" : "primary"}
+                            disabled={!useImage}
                         >
                             선지 상세 이미지 {photo ? "수정" : "추가"}
                         </Button>

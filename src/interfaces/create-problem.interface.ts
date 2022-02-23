@@ -1,3 +1,5 @@
+import { IUnitInfo } from "./subject.interface";
+
 export interface CreateProblemInput {
     // 시험여부
     isExam: boolean
@@ -27,10 +29,6 @@ export interface CreateProblemInput {
     // 사진파일 url
     image?: string
 
-    // 소단원 id
-    unitId: number
-
-
     // 선지
     choices: IChoice[]
 }
@@ -47,4 +45,6 @@ export interface IChoice {
     solution: string
     image?: string
     description?: string
+    // 서버 전송시에는 소단원 숫자만 전송
+   unitId: number
 }

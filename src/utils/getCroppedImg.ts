@@ -1,18 +1,11 @@
-import { Crop } from 'react-image-crop'
-
-interface GetCroppedImgProps {
-    url: string
-    width: number
-    height: number
-    crop:Crop
-}
+import { IPhoto } from 'interfaces/photo.interface';
 
 interface CroppedImg {
     url: string
     width: number
     height: number
 }
-export function getCroppedImg({url, width, height, crop}:GetCroppedImgProps):Promise<CroppedImg> {
+export function getCroppedImg({url, width, height, crop}:IPhoto):Promise<CroppedImg> {
     const X = width * crop.x / 100,
         Y = height * crop.y / 100,
         WIDTH = width * crop.width / 100,

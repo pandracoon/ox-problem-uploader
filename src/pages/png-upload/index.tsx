@@ -4,14 +4,16 @@ import { Box, Text } from "materials"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { PNGUploader } from "./png-uploader"
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
 import { examPNGProblemsState } from "atoms/pngPhotos"
 import { ProblemPreview } from "./ProblemPreview"
 import { exams, IExam } from "data/exams"
 import useLocalStorage from "utils/useLocalStorage"
-import { currentSubjectState, subjectsListState } from "atoms"
+import { currentSubjectState, imageUrlsState, problemSelector, subjectsListState } from "atoms"
 import { getSubjectsApi } from "api/get-subjects.api"
 import { getChaptersApi } from "api/get-chapters.api"
+import { UploadFeatures, ChoiceUploadFeatures } from "interfaces/upload-features.interface"
+import { getCroppedImg } from "utils/getCroppedImg"
 
 const { Option } = Select;
 
@@ -30,14 +32,18 @@ const GridBox = styled.div`
 
 
 export function PNGUpload(){
-    const photos = useRecoilValue(examPNGProblemsState)
-    const resetPhotos = useResetRecoilState(examPNGProblemsState)
+    const problems = useRecoilValue(examPNGProblemsState)
+    const resetProblems = useResetRecoilState(examPNGProblemsState)
     const year_now = useMemo(() => new Date().getFullYear()+1, [])
     const [year, setYear] = useLocalStorage<number>('current/selected/year',year_now)
     const [exam, setExam] = useLocalStorage<IExam>('current/selected/exam',exams[0])
     
     const [subjectsList, setSubjectsList] = useRecoilState(subjectsListState)
     const [currentSubject, setSubject] = useRecoilState(currentSubjectState)
+
+    const setImageUrlMappedArray = useSetRecoilState(imageUrlsState)
+    // 메인 화면에 문제를 업로드 하는 함수
+    const appendProblems = useSetRecoilState(problemSelector);
     
     // subject 목록 받아오기
     useEffect(() => {
@@ -56,7 +62,68 @@ export function PNGUpload(){
     const toHome = () => navigate('/')
     const toConvertPDF2PNG = () => window.open('https://pdf2png.com/ko/')
 
+    const resetAllProblems = () => {
+        const ok = window.confirm('모든 문제를 삭제하시겠습니까?')
+        if(!ok)
+            return;
+        resetProblems()
+    }
 
+    const onReadyUpload = async () => {
+        const ok = window.confirm('모든 문제를 등록하시겠습니까?')
+        if(!ok)
+            return;
+
+        const addFilenameUrlMapping = (name:string, url:string) =>
+            setImageUrlMappedArray(prev => prev.concat({name, url}))
+
+        const result_problems:UploadFeatures[] = await Promise.all(
+            // photo: 문제 이미지
+            problems.map(async ({useImage, index, photo, description, correct_rate, choices}) => {
+                const {alias, ...examInfo} = exam
+
+                // filename은 table row의 key로도 사용됨
+                const filename = `${year}_${alias}_no${index}`
+
+                if(useImage){
+                    const {url} = await getCroppedImg(photo)
+                    // filename - url 맵에 추가
+                    addFilenameUrlMapping(filename, url)
+                }
+
+                // 문제 내 모든 선지에 대해 이미지를 url로 변환
+                const choices_with_filename:ChoiceUploadFeatures[] = await Promise.all(
+                    choices.map(async ({photo, ...rest}) => {
+                        if(!useImage || !photo) 
+                            return rest;
+                        const {url} = await getCroppedImg(photo)
+                        const filename = `${year}_${alias}_no${index}_${rest.index}`
+                        addFilenameUrlMapping(filename, url)
+                        return {
+                            filename, 
+                            ...rest
+                        }
+                    })
+                )
+                
+                return {
+                    key: filename,
+                    isExam: true,
+                    year,
+                    ...examInfo,
+                    number: index+"",
+                    correct_rate,
+                    description,
+                    filename: useImage ? filename : "",
+                    choices: choices_with_filename
+                }
+            })
+        )
+
+        // 문제 추가
+        appendProblems(result_problems)
+        resetProblems()
+    }
 
     return (
         <Wrapper>
@@ -75,9 +142,9 @@ export function PNGUpload(){
                 </Box>
 
                 <Box alignItems="center">
-                    <PNGUploader />
-                    <Button type="ghost" danger onClick={resetPhotos}>
-                        파일 삭제
+                    <PNGUploader canUpload={!problems.length} />
+                    <Button type="ghost" danger onClick={resetAllProblems}>
+                        전체 문제 삭제
                     </Button>
                     <Button type="link" onClick={toConvertPDF2PNG}>
                         PDF→PNG 변환하기
@@ -86,45 +153,52 @@ export function PNGUpload(){
             </Box>
             {/* Header Finish */}
 
-            {/* 과목 선택 */}
-            <Box>
-                <Box flexDirection="column">
-                    <Text type="P1" align="center" content="연도" marginBottom={5} />
-                    <InputNumber 
-                        max={year_now} 
-                        placeholder={""+year_now} 
-                        value={year}  
-                        onChange={setYear}
-                    />
+            <Box justifyContent="space-between" alignItems="center">
+                {/* 과목 선택 */}
+                <Box>
+                    <Box flexDirection="column">
+                        <Text type="P1" align="center" content="연도" marginBottom={5} />
+                        <InputNumber 
+                            max={year_now} 
+                            placeholder={""+year_now} 
+                            value={year}  
+                            onChange={setYear}
+                        />
+                    </Box>
+                    <Box flexDirection="column" marginLeft={12}>
+                        <Text type="P1" align="center" content="시험 종류" marginBottom={5} />
+                        <Select 
+                            defaultValue={exam.alias}
+                            onChange={selectExam}
+                            style={{width: 200}}
+                        >
+                            {exams.map((ex) => (
+                                <Option value={ex.alias} children={ex.alias} key={ex.alias} />
+                            ))}
+                        </Select>
+                    </Box>
+                    <Box flexDirection="column" marginLeft={12}>
+                        <Text type="P1" align="center" content="과목" marginBottom={5} />
+                        <Select 
+                            defaultValue={currentSubject.code} 
+                            style={{ width: 120 }} 
+                            onChange={selectSubject}>
+                            {subjectsList.map((s) => (
+                                <Option value={s.code} children={s.name} key={s.code} />
+                            ))}
+                        </Select>
+                    </Box>
                 </Box>
-                <Box flexDirection="column" marginLeft={12}>
-                    <Text type="P1" align="center" content="시험 종류" marginBottom={5} />
-                    <Select 
-                        defaultValue={exam.alias}
-                        onChange={selectExam}
-                        style={{width: 200}}
-                    >
-                        {exams.map((ex) => (
-                            <Option value={ex.alias} children={ex.alias} key={ex.alias} />
-                        ))}
-                    </Select>
-                </Box>
-                <Box flexDirection="column" marginLeft={12}>
-                    <Text type="P1" align="center" content="과목" marginBottom={5} />
-                    <Select 
-                        defaultValue={currentSubject.code} 
-                        style={{ width: 120 }} 
-                        onChange={selectSubject}>
-                        {subjectsList.map((s) => (
-                            <Option value={s.code} children={s.name} key={s.code} />
-                        ))}
-                    </Select>
-                </Box>
+
+
+                <Button type="primary" onClick={onReadyUpload}>
+                    메인 화면에 문제 업로드 
+                </Button>
             </Box>
             {/* 과목 선택 finish */}
 
             <GridBox>
-                {photos.map((_, idx) => (
+                {problems.map((_, idx) => (
                     <ProblemPreview index={idx} source={{year, ...exam}} key={idx} />
                 ))}
             </GridBox>

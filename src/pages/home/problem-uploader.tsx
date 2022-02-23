@@ -41,12 +41,11 @@ export default function ProblemCsvReader(){
         const keyItem = ""+today.getHours()+today.getMinutes()+today.getSeconds()
         const rawDatas = data.slice(1);
         const problems:UploadFeatures[] = rawDatas.map(
-            ([isExam, year,month,source,org,number,unit,
-                description,correct_rate,filename, choicesNotation, ...choicesEntry], index) => {
-                const unitInfo = getUnitInfo(+unit)
-
+            ([isExam, year,month,source,org,number, description,
+                correct_rate, filename, choicesNotation, ...choicesEntry], index) => {
+                    
                 const choices:ChoiceUploadFeatures[] = []
-                const ENTRY_LENGTH = 5;
+                const ENTRY_LENGTH = 6;
                 for (let i = 0; i < choicesEntry.length; i+=ENTRY_LENGTH) {
                     const $ = Math.floor(i/ENTRY_LENGTH);
                     let index;
@@ -63,17 +62,22 @@ export default function ProblemCsvReader(){
                         break;
                     const answer = !!(+choicesEntry[i+1])
                     const solution = choicesEntry[i+2].trim()
+                    const unitInfo = getUnitInfo(+(choicesEntry[i+5].trim()))
+
                     const choice = {
                         index,
                         question,
                         answer,
                         solution,
+                        unit: unitInfo
                     }
 
                     const filename = choicesEntry[i+3].trim()
                     const choice_description = choicesEntry[i+4].trim()
                     if(filename)
-                        Object.assign(choice, {filename, description: choice_description})
+                        Object.assign(choice, {filename})
+                    if(choice_description)
+                        Object.assign(choice, {description: choice_description})
 
                     choices.push(choice)
                 }
@@ -87,7 +91,6 @@ export default function ProblemCsvReader(){
                     org:org.trim(),
                     description:description.trim(),
                     number:number.trim(),
-                    unit: unitInfo,
                     correct_rate: +correct_rate,
                     filename: filename.trim(),
                     choices

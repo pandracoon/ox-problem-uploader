@@ -1,9 +1,9 @@
-import { Button, Divider, Input, InputNumber, Select, Switch } from "antd"
+import { Button, Divider, Input, InputNumber, Switch } from "antd"
 import { currentSubjectState } from "atoms"
-import { examPNGProblemsState, useRemoveProblem, useSetProblem, useSetUnitinfo } from "atoms/pngPhotos"
+import { examPNGProblemsState, useRemoveProblem, useSetProblem, useSetUseImage } from "atoms/pngPhotos"
 import { ISource } from "interfaces/source.interface"
 import { Box, Text } from "materials"
-import { ChangeEvent, useCallback, useMemo, useState } from "react"
+import { ChangeEvent, useCallback, useState } from "react"
 import { AiOutlineDelete } from "react-icons/ai"
 import { useRecoilValue } from "recoil"
 import { gccTextDetection } from "utils/gcc-text-detection"
@@ -11,27 +11,22 @@ import { getCroppedImg } from "utils/getCroppedImg"
 import { ChoicesEditor } from "./ChoicesEditor"
 import { ImageWithCropper } from "./ImageWithCropper"
 
-const { Option } = Select;
-
 interface ProblemPreviewProps {
     index: number
     source: Omit<ISource, 'subject'>
 }
 
 export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps) => {
-    const {index:problem_real_index, description, correct_rate, photo} = useRecoilValue(examPNGProblemsState)[index]
+    const {index:problem_real_index, description, correct_rate, photo, useImage} = useRecoilValue(examPNGProblemsState)[index]
     const currentSubject = useRecoilValue(currentSubjectState)
     const intro = `${year} ${alias} ${currentSubject.name}, ${problem_real_index}번`
 
     // remove problem
     const _removeProblem = useRemoveProblem()
-    const onRemove = () =>  _removeProblem(index)
+    const onRemove = useCallback(() =>  _removeProblem(index),[index])
     
-    // unit select
-    const _setUnitinfo = useSetUnitinfo()
-    const setUnitinfo = useCallback((unit_index:number) => _setUnitinfo(index, unit_index),[_setUnitinfo, index])
-    
-    const units = useMemo(() => currentSubject.chapters.map(ch => ch.units).flat(), [currentSubject.chapters])
+    const _setUseImage = useSetUseImage()
+    const onChangeUseImage = useCallback((useImage: boolean) => _setUseImage(index, useImage), [index])
 
     // 선지 종류
     const [isKor, setIsKor] = useState<boolean>(true)
@@ -66,25 +61,20 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
 
 
                 <Box alignItems="center" justifyContent="space-between">
-                    {/* 단원 선택 */}
+                    {/* 선지 종류(한글/숫자) 설정 */}
                     <Box alignItems="center">
-                        <Text type="P1" content="소단원" marginRight={6} marginBottom={4} /> 
-                        <Select
-                            showSearch
-                            filterOption={(input, option) => option?.includes(input)}
-                            onChange={setUnitinfo}
-                            placeholder="단원을 선택해주세요."
-                            style={{width: 200}}
-                        >
-                            {units.map((unit) => (
-                                <Option value={unit.index} children={unit.title} key={unit.id} />
-                            ))}
-                        </Select>
+                        <Text type="P1" content="이미지 사용 여부" marginRight={5} marginBottom={4} />
+                        <Switch 
+                            checkedChildren="on" 
+                            unCheckedChildren="off" 
+                            checked={useImage}
+                            onChange={onChangeUseImage}
+                        />
                     </Box>
-                    
+
                     {/* 정답률 */}
                     <Box alignItems="center">
-                        <Text type="P1" content="정답률" marginRight={5} marginBottom={4} />
+                        <Text type="P1" content="정답률" marginRight={8} marginBottom={4} />
                         <InputNumber 
                             placeholder="정답률"
                             formatter={value => `${value}%`}
@@ -102,6 +92,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                             checkedChildren="ㄱㄴㄷ" 
                             unCheckedChildren="12345" 
                             defaultChecked 
+                            checked={isKor}
                             onChange={setIsKor}
                         />
                     </Box>
@@ -130,7 +121,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
 
                 {/* 자주 사용되는 글자들 */}
                 <Text type="D1" content="☆ 자주 사용하는 문자" marginBottom={4} /> 
-                <Text type="P2" content="㉠ ㉡ ㉢ ⍺ β θ ⍴ 𝒙 𝒚" marginBottom={4} /> 
+                <Text type="P1" content="㉠ ㉡ ㉢ ㉣ ㉤ ⓐ ⓑ ⓒ ⓓ ⍺ β θ ⍴ 𝒙 𝒚 𝒛" marginBottom={4} /> 
                
 
             </Box>

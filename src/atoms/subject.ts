@@ -1,9 +1,12 @@
 import { ISubject, ISubjectWithChapters, IUnitInfo } from "interfaces/subject.interface";
+import { useMemo } from "react";
 import { atom, useRecoilValue } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { defaultSubject } from "./defaultSubject";
 
-const { persistAtom } = recoilPersist()
+const { persistAtom } = recoilPersist({
+    storage: sessionStorage
+})
 
 export const subjectsListState = atom<Omit<ISubject, 'chapters'>[]>({
     key: 'subjects/list',
@@ -39,4 +42,11 @@ export const useGetunit = () => {
         }
     }
     return getter
+}
+
+// 현재 선택된 과목들의 모든 소단원 가져옴
+export const useGetUnitListofCurrentSubject = () => {
+    const {chapters} = useRecoilValue(currentSubjectState)
+    const units = useMemo(() => chapters.map(ch => ch.units).flat(), [chapters])
+    return units;
 }

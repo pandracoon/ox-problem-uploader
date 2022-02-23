@@ -1,7 +1,9 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
-const { persistAtom } = recoilPersist()
+const { persistAtom } = recoilPersist({
+    storage: sessionStorage,
+})
 
 interface ImageNameUrl {
     name: string

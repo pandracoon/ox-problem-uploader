@@ -1,6 +1,6 @@
 import { ColumnsType } from "antd/lib/table";
 import { UploadFeatures } from "interfaces/upload-features.interface";
-import { ChapterRenderer, UnitRenderer, RowDeleter, ImageNameRenderer, IsExamRenderer, ChoiceRenderer } from "./CellRenderers";
+import { RowDeleter, ImageNameRenderer, IsExamRenderer, ChoiceRenderer } from "./CellRenderers";
 
 
 export const columns: ColumnsType<UploadFeatures> = [
@@ -48,22 +48,6 @@ export const columns: ColumnsType<UploadFeatures> = [
       align: 'center',
       width: 70
     }, 
-    {
-      title: '대단원',
-      dataIndex: 'unit',
-      key: 'chapter',
-      ellipsis: true,
-      width: 150,
-      render: ChapterRenderer
-    },
-    {
-      title: '소단원',
-      dataIndex: 'unit',
-      key: 'unit',
-      ellipsis: true,
-      width: 150,
-      render: UnitRenderer
-    },
     {
       title: '자료 설명',
       dataIndex: 'description',

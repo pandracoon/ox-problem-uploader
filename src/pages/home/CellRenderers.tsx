@@ -22,17 +22,6 @@ export const IsExamRenderer = (value:string, record:UploadFeatures) => {
     )
 }
 
-export const ChapterRenderer = (value:string, {unit}:UploadFeatures) => {
-    return unit.info ? unit.info.chapter : (
-        <IoMdWarning color="#FF4D4F" size={18} />
-    )
-}
-export const UnitRenderer = (value:string, {unit}: UploadFeatures) => {
-    return unit.info ? unit.info.unit  : (
-        <IoMdWarning color="#FF4D4F" size={18} />
-    )
-}
-
 
 export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
     const [Modalvisible, onVisibleChange] = useState<boolean>(false);
@@ -56,11 +45,12 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
     // const openAddImageModal = () => setAddImageModalVisible(true)
     // const closeAddImageModal = () => setAddImageModalVisible(false)
 
-    return (
+    const fname_elipsis = record.filename.length > 7 ? record.filename.slice(0,8)+"..." : record.filename
+    return record.filename ? (
         <Box>
             <Tag 
                 color={url ? "blue" : "red"} 
-                children={record.filename}
+                children={fname_elipsis}
                 onClick={openImageView}
                 style={{
                     flex: 1,
@@ -94,6 +84,14 @@ export const ImageNameRenderer = (_:any, record:UploadFeatures) => {
             </>
             }
         </Box>
+    ) : (
+        <Tag 
+            children="그림 없음"
+            style={{
+                flex: 1,
+                marginBottom:5,
+            }}
+        />
     )
     
 }
@@ -111,7 +109,7 @@ export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
     
     return (
         <Box justifyContent="center" >
-            {choices.map(({index, question, solution, answer, filename}) => {
+            {choices.map(({index, question, solution, answer, filename, unit}) => {
                 const onRemove = () => {
                     if(!filename)
                         return;
@@ -121,9 +119,12 @@ export const ChoiceRenderer = (_:any, {choices}:UploadFeatures) => {
                 }
                 const image = filename ? imageUrls.find(img => img.name===filename) : undefined
 
+                // 선지에 hover했을 때 나오는 내용
                 const content = (
                     <Box flexDirection="column" style={{width: 300}}>
-                        <Text bold content={question} />
+                        <Text type="D1" content={`대단원: ${unit.info?.chapter || "없음"}`} />
+                        <Text type="D1" content={`소단원: ${unit.info?.unit || "없음"}`} />
+                        <Text bold content={question} marginTop={8} />
                         <Text content={`정답: ${answer ? "O" : "X"}`} />
                         <Text type="D2" content={solution} />
                         {filename && (

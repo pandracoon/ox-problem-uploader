@@ -1,42 +1,42 @@
 import { IChoice } from "./create-problem.interface";
 import { IUnitInfo } from "./subject.interface";
 
-export interface ChoiceUploadFeatures extends Omit<IChoice, "image"> {
+export interface ChoiceUploadFeatures extends Omit<Omit<IChoice, "image">, "unitId"> {
    filename?: string
+   // 소단원
+   unit: IUnitInfo
 }
 
+// 서버에 전송하기 전 유저가 보는 데이터
 export interface UploadFeatures {
-      key: string
+   key: string
 
  // 시험여부
-    isExam: boolean
+   isExam: boolean
     
  // 발행연도
-    year: number
+   year: number
 
  // 월 
-    month: number
+   month: number
 
  // 출처명
-    source: string
+   source: string
 
  // 출제기관
-    org: string
+   org: string
     
  // 번호
-    number: string
-
- // 소단원
-    unit: IUnitInfo
+   number: string
     
  // 자료설명
-    description: string
+   description: string
  
 // 정답률
-    correct_rate: number
+   correct_rate: number
 
  // 사진파일명
-    filename: string
+   filename: string
 
  //  선지
    choices: ChoiceUploadFeatures[]
