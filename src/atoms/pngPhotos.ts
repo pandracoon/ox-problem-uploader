@@ -21,15 +21,6 @@ export const useReadImages = () => {
     const setProblems = useSetRecoilState(examPNGProblemsState)
     const readImages = useCallback((problemCountPerPage: number, startIndex: number) => (event:ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
-        if(!startIndex ){
-            alert('문제 시작 번호를 입력해주세요.')
-            return;
-        }
-        if(startIndex+problemCountPerPage > 21 ){
-            alert('문제 시작 번호를 확인해주세요.')
-            return;
-        }
-
         const {target: {files: fileList}} = event;
         if(!fileList)
             return;

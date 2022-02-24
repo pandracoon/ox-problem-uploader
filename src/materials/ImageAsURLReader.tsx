@@ -4,15 +4,15 @@ import styled from "styled-components";
 
 export interface ReadImageProps {
     url: string
-    width?: number
-    height?: number
+    width: number
+    height: number
 }
 interface ImageReaderProps {
     onLoad: (props: ReadImageProps) => void
 }
 
 const Container = styled.div`
-    .#image-input {
+    #image-input {
         display: none;
     }
 `
