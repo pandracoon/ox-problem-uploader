@@ -13,4 +13,4 @@ export const client = new S3Client({
     }
 })
 
-export const BUCKET_NAME = 'nemo-images';
+export const BUCKET_NAME = 'oxchoice-images';

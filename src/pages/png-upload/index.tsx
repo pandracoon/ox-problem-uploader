@@ -92,7 +92,7 @@ export function PNGUpload(){
                 const {alias, ...examInfo} = exam
 
                 // filename은 table row의 key로도 사용됨
-                const filename = `${year}_${alias}_no${index}`
+                const filename = `${year}_${alias.split(' ').join('_')}_${currentSubject.name}_no${index}`
 
                 if(useImage){
                     const {url:base64} = await getCroppedImg(photo)
@@ -107,8 +107,8 @@ export function PNGUpload(){
                         if(!useImage || !photo) 
                             return rest;
                         const {url:base64} = await getCroppedImg(photo)
-                        const filename = `${year}_${alias}_no${index}_${rest.index}`
-                        const url = await s3UploadFile(base64, currentSubject.code, filename)
+                        const filename_forChoice = `${filename}_${rest.index}`
+                        const url = await s3UploadFile(base64, currentSubject.code, filename_forChoice)
                         addImageUrlMap(filename, url)
 
                         return {
