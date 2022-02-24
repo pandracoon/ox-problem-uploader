@@ -1,5 +1,5 @@
 import Upload, { RcFile } from "antd/lib/upload";
-import { currentSubjectState, imageUrlsState, problemsState } from "atoms";
+import { currentSubjectState, imageUrlsState, problemsState, useAddImageUrlMap } from "atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { UploadRequestOption } from "rc-upload/lib/interface";
 import { s3UploadFile } from "api/s3/\bs3uploadFile";
@@ -11,17 +11,8 @@ import { ChoiceUploadFeatures } from "interfaces/upload-features.interface";
 export const useUploadFiles = () => {
     const { code, name } = useRecoilValue(currentSubjectState)
     const [imageUrls, setImageUrls] = useRecoilState(imageUrlsState);
+    const addImageUrlMap = useAddImageUrlMap()
     const problems = useRecoilValue(problemsState)
-
-    const addImageUrlMap = (name: string, url: string) => {
-        setImageUrls(prev => {
-            if(prev.findIndex(item => item.name === name) > -1)
-                return prev;
-            else 
-                return [...prev, {name, url}]
-            
-        })
-    }
 
     const handleFiles = (file:RcFile, fileList:RcFile[]) => {
         // 파일명에서 확장자 제거

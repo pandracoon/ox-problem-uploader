@@ -9,7 +9,7 @@ import { examPNGProblemsState } from "atoms/pngPhotos"
 import { ProblemPreview } from "./ProblemPreview"
 import { exams, IExam } from "data/exams"
 import useLocalStorage from "utils/useLocalStorage"
-import { currentSubjectState, imageUrlsState, problemSelector, subjectsListState } from "atoms"
+import { currentSubjectState, problemSelector, subjectsListState, useAddImageUrlMap } from "atoms"
 import { getSubjectsApi } from "api/get-subjects.api"
 import { getChaptersApi } from "api/get-chapters.api"
 import { UploadFeatures, ChoiceUploadFeatures } from "interfaces/upload-features.interface"
@@ -44,9 +44,10 @@ export function PNGUpload(){
     const [subjectsList, setSubjectsList] = useRecoilState(subjectsListState)
     const [currentSubject, setSubject] = useRecoilState(currentSubjectState)
 
-    const setImageUrlMappedArray = useSetRecoilState(imageUrlsState)
     // 메인 화면에 문제를 업로드 하는 함수
     const appendProblems = useSetRecoilState(problemSelector);
+    // 이미지 이름 - src 매핑
+    const addImageUrlMap = useAddImageUrlMap()
 
 
     // 시험지 업로드 모달 제어
@@ -226,8 +227,4 @@ export function PNGUpload(){
             />
         </Wrapper>
     )
-}
-
-function addImageUrlMap(fname: any, url: string) {
-    throw new Error("Function not implemented.")
 }

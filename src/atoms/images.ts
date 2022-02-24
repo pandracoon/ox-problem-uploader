@@ -16,13 +16,14 @@ export const imageUrlsState = atom<ImageNameUrl[]>({
     effects_UNSTABLE: [ persistAtom ],
 })
 
-export const useAddImageUrlMap = (name: string, url: string) => {
+export const useAddImageUrlMap = () => {
     const setImageUrls = useSetRecoilState(imageUrlsState)
-    setImageUrls(prev => {
+    const addImageUrlMap = (name: string, url: string) => setImageUrls(prev => {
         if(prev.findIndex(item => item.name === name) > -1)
             return prev;
         else 
             return [...prev, {name, url}]
         
     })
+    return addImageUrlMap
 }
