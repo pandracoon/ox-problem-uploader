@@ -155,15 +155,16 @@ export function PNGUpload(){
                 </Box>
 
                 <Box alignItems="center">
-                    {problems.length === 0 && (
-                        <Button type="ghost" onClick={openUploadModal} style={{marginRight:12}}>
+                    {problems.length === 0 ? (
+                        <Button type="primary" onClick={openUploadModal} style={{marginRight:12}}>
                             시험지 PNG 업로드하기
+                        </Button>
+                    ) : (
+                        <Button type="ghost" danger onClick={resetAllProblems}>
+                            전체 문제 삭제
                         </Button>
                     )}
 
-                    <Button type="ghost" danger onClick={resetAllProblems}>
-                        전체 문제 삭제
-                    </Button>
                     <Button type="link" onClick={toConvertPDF2PNG}>
                         PDF→PNG 변환하기
                     </Button>
@@ -209,7 +210,11 @@ export function PNGUpload(){
                 </Box>
 
 
-                <Button type="primary" onClick={onReadyUpload}>
+                <Button 
+                    type="primary" 
+                    onClick={onReadyUpload}
+                    disabled={problems.length===0}
+                >
                     메인 화면에 문제 업로드 
                 </Button>
             </Box>
