@@ -14,7 +14,6 @@ import { getSubjectsApi } from "api/get-subjects.api"
 import { getChaptersApi } from "api/get-chapters.api"
 import { UploadFeatures, ChoiceUploadFeatures } from "interfaces/upload-features.interface"
 import { getCroppedImg } from "utils/getCroppedImg"
-import Modal from "antd/lib/modal/Modal"
 import { PNGUploadModal } from "./PNGUploadModal"
 import { s3UploadFile } from "api/s3/\bs3uploadFile"
 

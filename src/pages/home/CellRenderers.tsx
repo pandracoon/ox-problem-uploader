@@ -1,5 +1,4 @@
 import { UploadFeatures } from "interfaces/upload-features.interface"
-import { IoMdAdd, IoMdWarning } from "react-icons/io"
 import { problemsState, imageUrlsState } from "atoms";
 import { RiDeleteBin6Line } from "react-icons/ri"
 import { useRecoilValue, useSetRecoilState } from "recoil";
