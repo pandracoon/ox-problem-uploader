@@ -1,8 +1,3 @@
-export interface IExamRoutine {
-    index: number
-    page: number
-    x: number
-    y:number
-    width: number
-    height: number
-}
+import { Crop } from "react-image-crop";
+
+export interface IExamRoutine extends Omit<Crop, "unit"> {}

@@ -18,10 +18,18 @@ export const examPNGProblemsState = atom<PNGUploadProblemFeature[]>({
 
 // 이미지 읽어와서 문제 생성
 export const useReadImages = () => {
-    const setPhotos = useSetRecoilState(examPNGProblemsState)
-    const readImages = useCallback((pageNo: number) => (event:ChangeEvent<HTMLInputElement>) => {
+    const setProblems = useSetRecoilState(examPNGProblemsState)
+    const readImages = useCallback((problemCountPerPage: number, startIndex: number) => (event:ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
-        console.log(event)
+        if(!startIndex ){
+            alert('문제 시작 번호를 입력해주세요.')
+            return;
+        }
+        if(startIndex+problemCountPerPage > 21 ){
+            alert('문제 시작 번호를 확인해주세요.')
+            return;
+        }
+
         const {target: {files: fileList}} = event;
         if(!fileList)
             return;
@@ -29,6 +37,10 @@ export const useReadImages = () => {
             alert('모의고사 시험지 png 파일은 한 장만 업로드 가능합니다.')
             return;
         }
+
+        const routine = EXAM_ROUTINES[problemCountPerPage]
+        if(!routine)
+            return;
 
         const file = Array.from(fileList)[0];
         const reader = new FileReader();
@@ -38,11 +50,10 @@ export const useReadImages = () => {
             img.src=url;
             img.onload = function(){
                 const {width, height} = img
-                setPhotos(prev => {
-                    const problems:PNGUploadProblemFeature[] = EXAM_ROUTINES
-                        .filter(({page}) => page === pageNo)
-                        .map(({page, index, ...crop_props}) => ({
-                            index,
+                setProblems(prev => {
+                    const problems:PNGUploadProblemFeature[] = 
+                        routine.map((crop_props, idx) => ({
+                            index: startIndex+idx,
                             useImage: true,
                             photo: {
                                 url,
@@ -62,41 +73,6 @@ export const useReadImages = () => {
             }
         };
         reader.readAsDataURL(file)
-
-
-        // files.forEach(async (file, pageNo) => {
-        //     const reader = new FileReader();
-        //     reader.onload = () => {
-        //         const url = reader.result as string;
-        //         const img = new Image();
-        //         img.src=url;
-        //         img.onload = function(){
-        //             const {width, height} = img
-        //             setPhotos(prev => {
-        //                 const problems:PNGUploadProblemFeature[] = EXAM_ROUTINES
-        //                     .filter(({page}) => page === pageNo)
-        //                     .map(({page, index, ...crop_props}) => ({
-        //                         index,
-        //                         useImage: true,
-        //                         photo: {
-        //                             url,
-        //                             crop: {
-        //                                 unit: "%",
-        //                                 ...crop_props
-        //                             },
-        //                             width,
-        //                             height
-        //                         },
-        //                         description: "",
-        //                         correct_rate: 0,
-        //                         choices: [],
-        //                     }))
-        //                 return prev.concat(problems).sort((a, b) => a.index - b.index)
-        //             });
-        //         }
-        //     };
-        //     reader.readAsDataURL(file)
-        // })
     },[])
     return readImages
 }

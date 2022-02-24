@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo } from "react"
+
+import React, { useEffect, useMemo, useState } from "react"
 import { Button, InputNumber, Select } from "antd"
-import { Box, Text } from "materials"
+import { Box, ImageAsURLReader, ReadImageProps, Text } from "materials"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
-import { PNGUploader } from "./png-uploader"
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
 import { examPNGProblemsState } from "atoms/pngPhotos"
 import { ProblemPreview } from "./ProblemPreview"
@@ -14,6 +14,7 @@ import { getSubjectsApi } from "api/get-subjects.api"
 import { getChaptersApi } from "api/get-chapters.api"
 import { UploadFeatures, ChoiceUploadFeatures } from "interfaces/upload-features.interface"
 import { getCroppedImg } from "utils/getCroppedImg"
+import Modal from "antd/lib/modal/Modal"
 
 const { Option } = Select;
 
@@ -44,7 +45,20 @@ export function PNGUpload(){
     const setImageUrlMappedArray = useSetRecoilState(imageUrlsState)
     // 메인 화면에 문제를 업로드 하는 함수
     const appendProblems = useSetRecoilState(problemSelector);
-    
+
+
+    // 시험지 업로드 모달 제어
+    const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
+    const openUploadModal = () => setUploadModalVisible(true)
+    const cancelUploadModal = () => setUploadModalVisible(false)
+
+    // 시험지 파일 업로드 관련
+    const [fileProps, setFileProps] = useState<ReadImageProps>({url: ""})
+
+    // 시작 문제 번호
+    const [startIndex, setStartIndex] = useState<number>(0);
+
+
     // subject 목록 받아오기
     useEffect(() => {
         getSubjectsApi()
@@ -142,7 +156,11 @@ export function PNGUpload(){
                 </Box>
 
                 <Box alignItems="center">
-                    <PNGUploader canUpload={!problems.length} />
+                    {/* <PNGUploader canUpload={!problems.length} /> */}
+                    <Button type="ghost" onClick={openUploadModal} style={{marginRight:12}}>
+                        시험지 PNG 업로드하기
+                    </Button>
+
                     <Button type="ghost" danger onClick={resetAllProblems}>
                         전체 문제 삭제
                     </Button>
@@ -202,6 +220,25 @@ export function PNGUpload(){
                     <ProblemPreview index={idx} source={{year, ...exam}} key={idx} />
                 ))}
             </GridBox>
+
+            <Modal 
+                visible={uploadModalVisible} 
+                title="문제 png 업로드"
+                okButtonProps={{style: {display: 'none'}}}
+                cancelText="취소"
+                onCancel={cancelUploadModal}
+            >
+               <Box flexDirection="column">
+                    <Text type="P1" content="업로드할 시험지의 첫 문제 번호를 입력해주세요." marginBottom={4} />
+                    <InputNumber 
+                        value={startIndex}
+                        onChange={setStartIndex}
+                        placeholder="1"
+                    />
+                    <Text type="P1" content="시험지의 문제 배치를 골라주세요." marginTop={16} />
+               </Box>
+               <ImageAsURLReader onLoad={setFileProps} />
+            </Modal>
         </Wrapper>
     )
 }
