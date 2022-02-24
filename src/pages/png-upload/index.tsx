@@ -16,6 +16,7 @@ import { UploadFeatures, ChoiceUploadFeatures } from "interfaces/upload-features
 import { getCroppedImg } from "utils/getCroppedImg"
 import Modal from "antd/lib/modal/Modal"
 import { PNGUploadModal } from "./PNGUploadModal"
+import { s3UploadFile } from "api/s3/\bs3uploadFile"
 
 const { Option } = Select;
 
@@ -83,11 +84,9 @@ export function PNGUpload(){
         if(!ok)
             return;
 
-        const addFilenameUrlMapping = (name:string, url:string) =>
-            setImageUrlMappedArray(prev => prev.concat({name, url}))
-
         const result_problems:UploadFeatures[] = await Promise.all(
             // photo: 문제 이미지
+            // 문제 이미지를 url로 변환 -> S3에 등록 -> 이미지 이름 - 파일url 매핑에 추가
             problems.map(async ({useImage, index, photo, description, correct_rate, choices}) => {
                 const {alias, ...examInfo} = exam
 
@@ -95,19 +94,22 @@ export function PNGUpload(){
                 const filename = `${year}_${alias}_no${index}`
 
                 if(useImage){
-                    const {url} = await getCroppedImg(photo)
+                    const {url:base64} = await getCroppedImg(photo)
+                    const url = await s3UploadFile(base64, currentSubject.code, filename)
                     // filename - url 맵에 추가
-                    addFilenameUrlMapping(filename, url)
+                    addImageUrlMap(filename, url)
                 }
 
-                // 문제 내 모든 선지에 대해 이미지를 url로 변환
+                // 문제 내 모든 선지에 대해 이미지를 url로 변환 -> S3에 등록 -> 이미지 이름 - 파일url 매핑에 추가
                 const choices_with_filename:ChoiceUploadFeatures[] = await Promise.all(
                     choices.map(async ({photo, ...rest}) => {
                         if(!useImage || !photo) 
                             return rest;
-                        const {url} = await getCroppedImg(photo)
+                        const {url:base64} = await getCroppedImg(photo)
                         const filename = `${year}_${alias}_no${index}_${rest.index}`
-                        addFilenameUrlMapping(filename, url)
+                        const url = await s3UploadFile(base64, currentSubject.code, filename)
+                        addImageUrlMap(filename, url)
+
                         return {
                             filename, 
                             ...rest
@@ -224,4 +226,8 @@ export function PNGUpload(){
             />
         </Wrapper>
     )
+}
+
+function addImageUrlMap(fname: any, url: string) {
+    throw new Error("Function not implemented.")
 }

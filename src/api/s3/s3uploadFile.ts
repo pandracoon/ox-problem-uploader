@@ -3,7 +3,7 @@ import { RcFile } from "antd/lib/upload";
 import { client, BUCKET_NAME } from "./config";
 
 
-export const s3UploadFile = async (file:RcFile | Blob, dir:string, filename: string) => {
+export const s3UploadFile = async (file:RcFile | Blob | string, dir:string, filename: string) => {
     const Key = `${dir}/${filename}`;
     const command = new PutObjectCommand({
         Bucket: BUCKET_NAME,
