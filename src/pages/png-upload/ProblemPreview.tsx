@@ -143,7 +143,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                 {/* 선지 추가/삭제 */}
                 <Box justifyContent="flex-end">
                     <Button danger type="primary" onClick={removeChoice} disabled={choices.length <= 3}  >
-                        {choices[choices.length-1].index}번 선지 삭제하기
+                        {choices.length && choices[choices.length-1].index+"번"} 선지 삭제하기
                     </Button>
                     <span style={{padding:5}} />
                     <Button type="primary" onClick={addChoice}>
