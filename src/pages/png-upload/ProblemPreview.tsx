@@ -1,9 +1,9 @@
 import { Button, Divider, Input, InputNumber, Switch } from "antd"
 import { currentSubjectState } from "atoms"
-import { examPNGProblemsState, useRemoveProblem, useSetProblem, useSetUseImage } from "atoms/pngPhotos"
+import { examPNGProblemsState, useRemoveProblem, useResetChoicesIndex, useSetProblem, useSetUseImage } from "atoms/pngPhotos"
 import { ISource } from "interfaces/source.interface"
 import { Box, Text } from "materials"
-import { ChangeEvent, useCallback, useState } from "react"
+import { ChangeEvent, useCallback, useEffect, useState } from "react"
 import { AiOutlineDelete } from "react-icons/ai"
 import { useRecoilValue } from "recoil"
 import { gccTextDetection } from "utils/gcc-text-detection"
@@ -17,10 +17,12 @@ interface ProblemPreviewProps {
 }
 
 export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps) => {
-    const {index:problem_real_index, description, correct_rate, photo, useImage} = useRecoilValue(examPNGProblemsState)[index]
+    const {index:problem_real_index, description, correct_rate, photo, useImage, choices} = useRecoilValue(examPNGProblemsState)[index]
     const currentSubject = useRecoilValue(currentSubjectState)
     const intro = `${year} ${alias} ${currentSubject.name}, ${problem_real_index}번`
 
+    
+    
     // remove problem
     const _removeProblem = useRemoveProblem()
     const onRemove = useCallback(() =>  _removeProblem(index),[index])
@@ -30,6 +32,15 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
 
     // 선지 종류
     const [isKor, setIsKor] = useState<boolean>(true)
+
+    // 선지 종류 변경 감지
+    const {resetChoicesIndex, addChoice:_addC, removeChoice:_removeC} = useResetChoicesIndex()
+    useEffect(() => {
+        resetChoicesIndex(index, isKor)
+    },[isKor])
+    const addChoice = useCallback(() => _addC(index, isKor), [index, isKor])
+    const removeChoice = useCallback(() => _removeC(index), [index, isKor])
+
 
     // set problem
     const setProblemGetter = useSetProblem()
@@ -126,11 +137,20 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
 
             </Box>
             
-            <ChoicesEditor 
-                index={index}
-                isKor={isKor}
-            />
-
+            <Box flexDirection="column" flex={1}>
+                {/* 선지 편집기 */}
+                <ChoicesEditor index={index}/>
+                {/* 선지 추가/삭제 */}
+                <Box justifyContent="flex-end">
+                    <Button danger type="primary" onClick={removeChoice} disabled={choices.length <= 3}  >
+                        {choices[choices.length-1].index}번 선지 삭제하기
+                    </Button>
+                    <span style={{padding:5}} />
+                    <Button type="primary" onClick={addChoice}>
+                        선지 추가하기
+                    </Button>
+                </Box>
+            </Box>
         </Box>
         <Divider />
     </>

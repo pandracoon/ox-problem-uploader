@@ -1,7 +1,7 @@
 import { Button, Divider, Input, Select, Switch, Tag } from "antd"
 import Modal from "antd/lib/modal/Modal"
 import { useGetUnitListofCurrentSubject } from "atoms"
-import { examPNGProblemsState, useResetChoices, useSetChoices } from "atoms/pngPhotos"
+import { examPNGProblemsState, useSetChoices } from "atoms/pngPhotos"
 import { IPhoto } from "interfaces/photo.interface"
 import { Box, Text } from "materials"
 import { Fragment, useEffect, useState } from "react"
@@ -11,13 +11,11 @@ import { getCroppedImg } from "utils/getCroppedImg"
 
 interface ChoicesEditorProps {
     index: number
-    isKor: boolean
 }
 const { Option } = Select;
 
-export const ChoicesEditor = ({index:problem_index, isKor}:ChoicesEditorProps) => {
+export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
     const {choices, photo, useImage} = useRecoilValue(examPNGProblemsState)[problem_index]
-    const resetChoices = useResetChoices()
     const getSetter = useSetChoices()
     const {
         setQuestion,
@@ -29,10 +27,6 @@ export const ChoicesEditor = ({index:problem_index, isKor}:ChoicesEditorProps) =
     } = getSetter(problem_index)
 
     const units = useGetUnitListofCurrentSubject()
-
-    useEffect(() => {
-        resetChoices(problem_index, isKor)
-    },[isKor])
 
     const [tempPhoto, setTempPhoto] = useState<IPhoto>(photo)
     // modal을 open하면 현재 선택된 이미지를 전체 이미지로 설정, 그 안에서 crop하도록
@@ -88,8 +82,9 @@ export const ChoicesEditor = ({index:problem_index, isKor}:ChoicesEditorProps) =
         setPhotoModalVisible(false)
     }
     
+
     return (
-        <Box flexDirection="column" flex={1}>
+        <Box flexDirection="column" >
             {choices.map(({index, question, answer, solution, description, photo}, i) => (
                 <Fragment key={i}>
                 <Box flexDirection="column" key={"choice"+i}>

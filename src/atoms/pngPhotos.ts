@@ -137,31 +137,71 @@ export const useSetProblem = () => {
     return getSetters
 }
 
-const KOR = ["ㄱ","ㄴ","ㄷ","ㄹ","ㅁ","ㅂ"]
-export const useResetChoices = () => {
+const KOR = ["ㄱ","ㄴ","ㄷ","ㄹ","ㅁ","ㅂ","ㅅ","ㅇ"]
+export const useResetChoicesIndex = () => {
     const setProblem = useSetRecoilState(examPNGProblemsState)
-    const resetUnitinfo = (problem_index: number, isKor: boolean) => {
-        // 선지 최신화
-        const newChoices:PNGUploadChoice[] = new Array(isKor ? 3 : 5)
-            .fill(0)
-            .map((_, i) => ({
-                index: isKor ? KOR[i] : i+1+"",
-                question: "",
-                answer: true,
-                solution: "",
-                description: "",
-                unit: {
-                    unitIndex: 1
-                }
-            }))
-
+    const resetChoicesIndex = (problem_index: number, isKor: boolean) => {
         setProblem(
             produce(draft => {
-                draft[problem_index].choices = newChoices;
+                const needInitiate = !draft[problem_index].choices.length;
+                if(needInitiate) {
+                     // 선지 최신화
+                    const newChoices:PNGUploadChoice[] = new Array(isKor ? 3 : 5)
+                    .fill(0)
+                    .map((_, i) => ({
+                        index: isKor ? KOR[i] : i+1+"",
+                        question: "",
+                        answer: true,
+                        solution: "",
+                        description: "",
+                        unit: {
+                            unitIndex: 1
+                        }
+                    }))
+                    draft[problem_index].choices = newChoices;
+                }
+                else {
+                    // 선지 인덱스(ㄱㄴㄷ or 12345)만 변경
+                    draft[problem_index].choices = draft[problem_index].choices.map(
+                        ({index, ...rest}, i) => ({
+                            index: isKor ? KOR[i] : i+1+"",
+                            ...rest
+                        })
+                    )
+                }
             })
         )
     }
-    return resetUnitinfo
+
+    const addChoice = (problem_index: number, isKor: boolean) => {
+        setProblem(
+            produce( draft => {
+                const countChoices = draft[problem_index].choices.length
+                // 선지 개수 초과
+                if(countChoices >= KOR.length){
+                    alert(`${KOR.length}개까지만 추가 가능합니다.`)
+                    return;
+                }
+                draft[problem_index].choices.push({
+                    index: isKor ? KOR[countChoices] : countChoices+1+"",
+                    question: "",
+                    answer: true,
+                    solution: "",
+                    description: "",
+                    unit: {
+                        unitIndex: 1
+                    }
+                })
+            })
+        )
+    }
+
+    const removeChoice = (problem_index:number) => {
+        setProblem(produce( draft => {
+            draft[problem_index].choices.pop() 
+        }))
+    }
+    return {resetChoicesIndex, addChoice, removeChoice}
 }
 
 export const useSetChoices = () => {
