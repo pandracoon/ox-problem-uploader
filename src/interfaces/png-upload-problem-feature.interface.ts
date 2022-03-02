@@ -12,6 +12,9 @@ export interface PNGUploadProblemFeature {
     useImage: boolean
     index: number
     photo: IPhoto
+
+    // 공통 해설
+    solution: string
     
     // 자료설명
     description: string

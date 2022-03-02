@@ -41,7 +41,7 @@ export default function ProblemCsvReader(){
         const keyItem = ""+today.getHours()+today.getMinutes()+today.getSeconds()
         const rawDatas = data.slice(1);
         const problems:UploadFeatures[] = rawDatas.map(
-            ([isExam, year,month,source,org,number, description,
+            ([isExam, year,month,source,org,number, description, solution,
                 correct_rate, filename, choicesNotation, ...choicesEntry], index) => {
                     
                 const choices:ChoiceUploadFeatures[] = []
@@ -90,6 +90,7 @@ export default function ProblemCsvReader(){
                     source: source.trim(),
                     org:org.trim(),
                     description:description.trim(),
+                    solution,
                     number:number.trim(),
                     correct_rate: +correct_rate,
                     filename: filename.trim(),

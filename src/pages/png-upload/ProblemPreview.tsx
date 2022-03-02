@@ -17,12 +17,19 @@ interface ProblemPreviewProps {
 }
 
 export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps) => {
-    const {index:problem_real_index, description, correct_rate, photo, useImage, choices} = useRecoilValue(examPNGProblemsState)[index]
+    const {
+        index:problem_real_index, 
+        description, 
+        correct_rate, 
+        photo, 
+        useImage,
+        solution, 
+        choices
+    } = useRecoilValue(examPNGProblemsState)[index]
     const currentSubject = useRecoilValue(currentSubjectState)
     const intro = `${year} ${alias} ${currentSubject.name}, ${problem_real_index}번`
 
-    
-    
+
     // remove problem
     const _removeProblem = useRemoveProblem()
     const onRemove = useCallback(() =>  _removeProblem(index),[index])
@@ -44,7 +51,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
 
     // set problem
     const setProblemGetter = useSetProblem()
-    const {setDescription, setCorrectRate} = setProblemGetter(index)
+    const {setDescription, setSolution, setCorrectRate} = setProblemGetter(index)
 
     const [detectedText, setDetectedText] = useState<string>("")
     const onTextDetection = async () => {
@@ -111,11 +118,20 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                 
                 <Box marginVertical={8}>
                     <Input.TextArea
-                        placeholder="자료 해설"
+                        placeholder="자료 설명"
                         value={description}
                         onChange={setDescription}
                     />
                 </Box>
+                <Box marginVertical={8}>
+                    <Input.TextArea
+                        placeholder="문제 공통 해설"
+                        value={solution}
+                        onChange={setSolution}
+                    />
+                </Box>
+
+                <Divider />
 
                 <Button color="primary" onClick={onTextDetection}>
                     현재 선택 이미지에서 텍스트 추출

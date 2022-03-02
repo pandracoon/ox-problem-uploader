@@ -28,6 +28,9 @@ export interface UploadFeatures {
     
  // 번호
    number: string
+
+//  공통 해설
+  solution: string
     
  // 자료설명
    description: string

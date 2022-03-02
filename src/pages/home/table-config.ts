@@ -54,6 +54,11 @@ export const columns: ColumnsType<UploadFeatures> = [
       key: 'description',
     },
     {
+      title: '공통 해설',
+      dataIndex: 'solution',
+      key: 'solution',
+    },
+    {
       title: '정답률',
       dataIndex: 'correct_rate',
       key: 'correct_rate',
