@@ -116,9 +116,11 @@ export function Home(){
                 const choices_with_unitId:IChoice[] = choices.map(({unit, ...rest}) => {
                     if(!unit.info)
                         throw Error()
+                    const image = imageUrls.find(item => item.name === filename)?.url
                     const { unitId } = unit.info
                     return {
                         unitId, 
+                        image,
                         ...rest
                     }
                 })
