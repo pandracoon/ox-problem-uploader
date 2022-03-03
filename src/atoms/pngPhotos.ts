@@ -55,6 +55,7 @@ export const useReadImages = () => {
                                 width,
                                 height
                             },
+                            score: 0,
                             solution:"",
                             description: "",
                             correct_rate: 0,
@@ -114,6 +115,7 @@ interface SetProblemProps {
     description?: string
     correct_rate?: number
     solution?: string
+    score?: number
 }
 
 export const useSetProblem = () => {
@@ -133,10 +135,13 @@ export const useSetProblem = () => {
                 setProblem(problem_index, {solution: value})
         const setCorrectRate = (rate:number) => 
                 setProblem(problem_index, {correct_rate: rate})
+        const setScore = (score:number) => 
+                setProblem(problem_index, {score})
         return {
             setDescription,
             setSolution,
             setCorrectRate,
+            setScore
         }
     },[setProblem])
     return getSetters

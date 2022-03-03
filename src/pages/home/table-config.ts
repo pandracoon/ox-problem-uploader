@@ -49,6 +49,14 @@ export const columns: ColumnsType<UploadFeatures> = [
       width: 70
     }, 
     {
+      title: '점수',
+      dataIndex: 'score',
+      key: 'score',
+      align: 'center',
+      width: 60,
+      // render: (_, r) => r.
+    }, 
+    {
       title: '자료 설명',
       dataIndex: 'description',
       key: 'description',

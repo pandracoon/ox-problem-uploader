@@ -96,6 +96,7 @@ export const PNGUploadModal = ({visible, onCancel}:PNGUploadModalProps) => {
                             ...crop_props
                         },
                     },
+                    score: 0, 
                     solution: "",
                     description: "",
                     correct_rate: 0,

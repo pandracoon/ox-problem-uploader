@@ -29,6 +29,9 @@ export interface UploadFeatures {
  // 번호
    number: string
 
+//  점수
+  score: number
+
 //  공통 해설
   solution: string
     

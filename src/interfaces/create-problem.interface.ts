@@ -20,6 +20,9 @@ export interface CreateProblemInput {
     // 문제집은 페이지 포함
     number: string
 
+    // 점수
+    score: number
+
     // 공통 해설
     solution: string
     

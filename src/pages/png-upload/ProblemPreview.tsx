@@ -24,7 +24,8 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
         photo, 
         useImage,
         solution, 
-        choices
+        choices,
+        score
     } = useRecoilValue(examPNGProblemsState)[index]
     const currentSubject = useRecoilValue(currentSubjectState)
     const intro = `${year} ${alias} ${currentSubject.name}, ${problem_real_index}번`
@@ -51,7 +52,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
 
     // set problem
     const setProblemGetter = useSetProblem()
-    const {setDescription, setSolution, setCorrectRate} = setProblemGetter(index)
+    const {setDescription, setSolution, setCorrectRate, setScore} = setProblemGetter(index)
 
     const [detectedText, setDetectedText] = useState<string>("")
     const onTextDetection = async () => {
@@ -81,7 +82,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                 <Box alignItems="center" justifyContent="space-between">
                     {/* 선지 종류(한글/숫자) 설정 */}
                     <Box alignItems="center">
-                        <Text type="P1" content="이미지 사용 여부" marginRight={5} marginBottom={4} />
+                        <Text type="P1" content="이미지 사용" marginRight={5} marginBottom={4} />
                         <Switch 
                             checkedChildren="on" 
                             unCheckedChildren="off" 
@@ -95,6 +96,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                         <Text type="P1" content="정답률" marginRight={8} marginBottom={4} />
                         <InputNumber 
                             placeholder="정답률"
+                            style={{width: 68}}
                             formatter={value => `${value}%`}
                             value={correct_rate}
                             onChange={setCorrectRate}
@@ -112,6 +114,19 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                             defaultChecked 
                             checked={isKor}
                             onChange={setIsKor}
+                        />
+                    </Box>
+
+                    {/* 문제 점수 */}
+                    <Box alignItems="center">
+                        <Text type="P1" content="점수" marginRight={5} marginBottom={4} />
+                        <InputNumber 
+                            placeholder="점수"
+                            value={score}
+                            style={{width: 50}}
+                            onChange={setScore}
+                            min={2}
+                            max={3}
                         />
                     </Box>
                 </Box>

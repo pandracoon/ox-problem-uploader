@@ -13,6 +13,8 @@ export interface PNGUploadProblemFeature {
     index: number
     photo: IPhoto
 
+    score: number
+    
     // 공통 해설
     solution: string
     

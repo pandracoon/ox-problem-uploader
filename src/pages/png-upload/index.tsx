@@ -37,7 +37,7 @@ export function PNGUpload(){
     const problems = useRecoilValue(examPNGProblemsState)
     const resetProblems = useResetRecoilState(examPNGProblemsState)
     const year_now = useMemo(() => new Date().getFullYear()+1, [])
-    const [year, setYear] = useLocalStorage<number>('current/selected/year',year_now)
+    const [year, setYear] = useLocalStorage<number>('current/selected/year', 0)
     const [exam, setExam] = useLocalStorage<IExam>('current/selected/exam',exams[0])
     
     const [subjectsList, setSubjectsList] = useRecoilState(subjectsListState)
@@ -80,6 +80,8 @@ export function PNGUpload(){
     }
 
     const onReadyUpload = async () => {
+        if(!year)
+            alert('연도와 시험 종류를 확인해 주세요.')
         const ok = window.confirm('모든 문제를 등록하시겠습니까?')
         if(!ok)
             return;
@@ -87,7 +89,7 @@ export function PNGUpload(){
         const result_problems:UploadFeatures[] = await Promise.all(
             // photo: 문제 이미지
             // 문제 이미지를 url로 변환 -> S3에 등록 -> 이미지 이름 - 파일url 매핑에 추가
-            problems.map(async ({useImage, index, photo, description, solution, correct_rate, choices}) => {
+            problems.map(async ({useImage, index, photo, description, solution, correct_rate, choices, score}) => {
                 const {alias, ...examInfo} = exam
 
                 // filename은 table row의 key로도 사용됨
@@ -126,6 +128,7 @@ export function PNGUpload(){
                     correct_rate,
                     description,
                     solution,
+                    score,
                     filename: useImage ? filename : "",
                     choices: choices_with_filename
                 }
