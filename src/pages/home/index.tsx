@@ -73,8 +73,6 @@ export function Home(){
     const imageUrls = useRecoilValue(imageUrlsState);
     const resetImageUrls = useResetRecoilState(imageUrlsState)
 
-
-    const toPNG = () => navigate('/png')
     const onReset = () => {
         const ok = window.confirm("전체 문제를 삭제하시겠습니까?")
         if(!ok)
@@ -147,18 +145,14 @@ export function Home(){
 
     return (
         <Wrapper>
+            {/* Header */}
             <Box 
                 justifyContent="space-between" 
                 alignItems="center"
                 marginBottom={24} 
+                paddingLeft={50}
             >
-                <Box alignItems="center">
-                    <Text type="H1" content="문제 업로드" marginRight={18} />
-                    {/* <Button type="link" > */}
-                    <Button type="link" onClick={toPNG}>
-                        시험 이미지 파일로 추가하기(베타 버전)
-                    </Button>
-                </Box>
+                <Text type="H1" content="문제 업로드" marginRight={18} />
                 <Gapbox>
                     <ProblemCsvReader />
                     <Button type="primary" danger onClick={onReset}>

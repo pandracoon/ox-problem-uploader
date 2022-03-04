@@ -149,13 +149,9 @@ export function PNGUpload(){
                 justifyContent="space-between" 
                 alignItems="center"
                 marginBottom={24} 
+                marginLeft={50}
             >
-                <Box alignItems="center">
-                    <Text type="H1" content="PNG로 추가하기" marginRight={18} />
-                    <Button type="link" onClick={toHome}>
-                        홈으로
-                    </Button>
-                </Box>
+                <Text type="H1" content="PNG로 추가하기" marginRight={18} />
 
                 <Box alignItems="center">
                     {problems.length === 0 ? (

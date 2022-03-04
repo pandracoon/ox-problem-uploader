@@ -1,16 +1,18 @@
 import React from "react";
 import { Routes, Route, HashRouter } from "react-router-dom";
-import { Home, NotFound, PNGUpload } from "pages";
-
+import { Home, NotFound, Overview, PNGUpload } from "pages";
+import { SideNav } from "sections/sidenav";
 
 const Router = () => {
   return (
     <HashRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/png" element={<PNGUpload />} />
-            <Route path='*' element={<NotFound />} />
-          </Routes>
+        <SideNav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/png" element={<PNGUpload />} />
+          <Route path="/overview" element={<Overview />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
     </HashRouter>
   );
 };
