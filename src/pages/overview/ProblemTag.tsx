@@ -19,7 +19,8 @@ export const ProblemTag = ({no, problem, onClick}:ProblemTagProps) => {
                 cursor: problem ? 'pointer' : 'default',
                 width: 72, 
                 padding: '8px 0', 
-                textAlign: "center"
+                textAlign: "center",
+                marginRight: 18
             }} 
         />
     )

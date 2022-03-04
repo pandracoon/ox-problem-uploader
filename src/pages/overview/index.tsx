@@ -93,7 +93,7 @@ export function Overview(){
                         />
                         <Text 
                             content={`${viewProblem.solution}`} 
-                            marginBottom={12} 
+                            marginVertical={12} 
                         />
                         </>
                     )}
