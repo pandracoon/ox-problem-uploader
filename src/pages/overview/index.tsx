@@ -80,7 +80,7 @@ export function Overview(){
                 </Box>
 
                 {/* 문제 상세 보기 */}
-                <Box flex={1} flexDirection="column">
+                <Box flex={1} flexDirection="column" marginRight={24}>
                     {viewProblem && (
                         <>
                         <Text 
@@ -88,7 +88,7 @@ export function Overview(){
                             marginBottom={12} 
                         />
                         <Image 
-                            src={'https://oxchoice-images.s3.ap-northeast-2.amazonaws.com/HIS/2021_수능_한국사_no3.png'}
+                            src={viewProblem.image}
                             width={400}
                         />
                         <Text 
