@@ -254,7 +254,6 @@ export const useSetChoices = () => {
 
         const setUnitinfo = (choice_index: string) => (unit_index: number) => {
             const unitInfo = getUnitInfo(unit_index)
-            console.log(unitInfo)
             _setChoices(problem_index, choice_index, {unit: unitInfo})
         }
 
