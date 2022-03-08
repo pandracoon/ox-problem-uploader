@@ -98,7 +98,7 @@ export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
                         <Select
                             showSearch
                             filterOption={(input, option) => option?.includes(input)}
-                            onChange={setUnitinfo}
+                            onChange={setUnitinfo(index)}
                             placeholder="단원을 선택해주세요."
                             style={{width: 200}}
                         >
@@ -142,7 +142,7 @@ export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
 
                     <Box marginTop={8} alignItems="center">
                         <Input
-                            placeholder="자료 해설(빈칸으로 두면 문제와 동일)"
+                            placeholder="선지별 이미지 설명(빈칸으로 두면 문제와 동일)"
                             value={description}
                             onChange={setDescription(index)}
                         />

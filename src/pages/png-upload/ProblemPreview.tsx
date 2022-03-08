@@ -68,7 +68,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
         <>
         <Box>
              <Box flexDirection="column" justifyContent="center" >
-                <Text type="D2" align="center" content="[자료 이미지]" marginBottom={4} /> 
+                <Text type="D2" align="center" content="[자료 이미지]" marginBottom={20} /> 
                 <ImageWithCropper index={index} />
             </Box>
 
