@@ -19,7 +19,6 @@ interface ProblemPreviewProps {
 export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps) => {
     const {
         index:problem_real_index, 
-        description, 
         correct_rate, 
         photo, 
         useImage,
@@ -52,7 +51,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
 
     // set problem
     const setProblemGetter = useSetProblem()
-    const {setDescription, setSolution, setCorrectRate, setScore} = setProblemGetter(index)
+    const {setSolution, setCorrectRate, setScore} = setProblemGetter(index)
 
     const [detectedText, setDetectedText] = useState<string>("")
     const onTextDetection = async () => {
@@ -131,13 +130,6 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                     </Box>
                 </Box>
                 
-                <Box marginVertical={8}>
-                    <Input.TextArea
-                        placeholder="자료 설명"
-                        value={description}
-                        onChange={setDescription}
-                    />
-                </Box>
                 <Box marginVertical={8}>
                     <Input.TextArea
                         placeholder="문제 공통 해설"

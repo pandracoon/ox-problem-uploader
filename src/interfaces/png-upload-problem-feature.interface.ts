@@ -17,9 +17,6 @@ export interface PNGUploadProblemFeature {
     
     // 공통 해설
     solution: string
-    
-    // 자료설명
-    description: string
      
     // 정답률
     correct_rate: number

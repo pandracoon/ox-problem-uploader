@@ -57,7 +57,6 @@ export const useReadImages = () => {
                             },
                             score: 0,
                             solution:"",
-                            description: "",
                             correct_rate: 0,
                             choices: [],
                         }))
@@ -112,7 +111,6 @@ export const useSetCrop = () => {
 }
 
 interface SetProblemProps {
-    description?: string
     correct_rate?: number
     solution?: string
     score?: number
@@ -129,8 +127,6 @@ export const useSetProblem = () => {
     },[_setProblem])
 
     const getSetters = useCallback((problem_index: number) => {
-        const setDescription = ({target:{value}}: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
-            setProblem(problem_index, {description: value})
         const setSolution = ({target:{value}}: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
                 setProblem(problem_index, {solution: value})
         const setCorrectRate = (rate:number) => 
@@ -138,7 +134,6 @@ export const useSetProblem = () => {
         const setScore = (score:number) => 
                 setProblem(problem_index, {score})
         return {
-            setDescription,
             setSolution,
             setCorrectRate,
             setScore

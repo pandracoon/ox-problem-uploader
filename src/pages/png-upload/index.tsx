@@ -92,7 +92,7 @@ export function PNGUpload(){
         const result_problems:UploadFeatures[] = await Promise.all(
             // photo: 문제 이미지
             // 문제 이미지를 url로 변환 -> S3에 등록 -> 이미지 이름 - 파일url 매핑에 추가
-            problems.map(async ({useImage, index, photo, description, solution, correct_rate, choices, score}) => {
+            problems.map(async ({useImage, index, photo, solution, correct_rate, choices, score}) => {
                 const {alias, ...examInfo} = exam
 
                 // filename은 table row의 key로도 사용됨
@@ -129,7 +129,6 @@ export function PNGUpload(){
                     ...examInfo,
                     number: index+"",
                     correct_rate,
-                    description,
                     solution,
                     score,
                     filename: useImage ? filename : "",

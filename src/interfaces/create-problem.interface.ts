@@ -26,9 +26,6 @@ export interface CreateProblemInput {
     // 공통 해설
     solution: string
     
-    // 자료 설명
-    description?: string
-    
     // 정답률
     correct_rate: number
 
