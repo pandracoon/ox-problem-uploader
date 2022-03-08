@@ -113,7 +113,7 @@ export function PNGUpload(){
                         const {url:base64} = await getCroppedImg(photo)
                         const filename_forChoice = `${filename}_${rest.index}`
                         const url = await s3UploadFile(base64, currentSubject.code, filename_forChoice)
-                        addImageUrlMap(filename, url)
+                        addImageUrlMap(filename_forChoice, url)
 
                         return {
                             filename, 
