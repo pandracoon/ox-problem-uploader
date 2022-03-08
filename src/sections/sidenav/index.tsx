@@ -1,5 +1,5 @@
 import { Button, Menu } from "antd"
-import { createElement, useState } from "react"
+import { createElement, useRef, useState } from "react"
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
@@ -22,9 +22,18 @@ export const SideNav = () => {
     const [collapsed, setCollapsed] = useState<boolean>(true)
     const toggleCollapsed = () => setCollapsed(p => !p)
     const navigate = useNavigate()
-    const toHome = () => navigate('/')
-    const toPNG = () => navigate('/png')
-    const toOverview = () => navigate('/overview')
+    const toHome = () => {
+      setCollapsed(true)
+      navigate('/')
+    }
+    const toPNG = () => {
+      setCollapsed(true)
+      navigate('/png')
+    }
+    const toOverview = () => {
+      setCollapsed(true)
+      navigate('/overview')
+    }
 
     return (
         <Wrapper>
