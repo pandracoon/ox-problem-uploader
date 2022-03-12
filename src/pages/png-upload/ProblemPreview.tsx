@@ -96,8 +96,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                         <InputNumber 
                             placeholder="정답률"
                             style={{width: 68}}
-                            formatter={value => `${value}%`}
-                            value={correct_rate}
+                            value={correct_rate || undefined}
                             onChange={setCorrectRate}
                             min={0}
                             max={100}

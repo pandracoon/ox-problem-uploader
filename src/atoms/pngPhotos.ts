@@ -55,7 +55,7 @@ export const useReadImages = () => {
                                 width,
                                 height
                             },
-                            score: 0,
+                            score: 2,
                             solution:"",
                             correct_rate: 0,
                             choices: [],
