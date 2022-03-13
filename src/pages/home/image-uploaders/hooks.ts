@@ -61,9 +61,9 @@ export const useUploadFiles = () => {
                 // S3에 저장될 파일 이름
                 // name: subject.name
                 const s3Filename = targetProblem.isExam ? 
-                    `${targetProblem.year}_${targetProblem.month}월_${targetProblem.org}_${targetProblem.source}_${name}_no${targetProblem.number}` 
+                    `${targetProblem.year}/${targetProblem.month}월_${targetProblem.org}_${targetProblem.source}_${name}_no${targetProblem.number}` 
                     : 
-                    `${targetProblem.year}_${targetProblem.org}_${targetProblem.source}_${name}_${targetProblem.number}` 
+                    `${targetProblem.year}/${targetProblem.org}_${targetProblem.source}_${name}_${targetProblem.number}` 
                 const url = await s3UploadFile(file, code, s3Filename)
                 addImageUrlMap(fname, url)
             } 
@@ -82,9 +82,9 @@ export const useUploadFiles = () => {
                 // S3에 저장될 파일 이름
                 // name: subject.name
                 const s3Filename = targetProblem.isExam ? 
-                    `${targetProblem.year}_${targetProblem.month}월_${targetProblem.org}_${targetProblem.source}_${name}_no${targetProblem.number}_${targetChoice.index}` 
+                    `${targetProblem.year}/${targetProblem.month}월_${targetProblem.org}_${targetProblem.source}_${name}_no${targetProblem.number}_${targetChoice.index}` 
                     : 
-                    `${targetProblem.year}_${targetProblem.org}_${targetProblem.source}_${name}_${targetProblem.number}_${targetChoice.index}` 
+                    `${targetProblem.year}/${targetProblem.org}_${targetProblem.source}_${name}_${targetProblem.number}_${targetChoice.index}` 
                 const url = await s3UploadFile(file, code, s3Filename)
                 addImageUrlMap(fname, url)
             }

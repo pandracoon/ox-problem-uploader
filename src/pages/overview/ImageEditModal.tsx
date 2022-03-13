@@ -23,7 +23,6 @@ export const ImageEditModal = ({visible, setVisible, setCurrentImage, src}:Image
 
     const close = () => setVisible(false)
     const onCrop = async () => {
-        console.log(image)
         if(!image)
             return;
 
@@ -32,6 +31,7 @@ export const ImageEditModal = ({visible, setVisible, setCurrentImage, src}:Image
         setVisible(false)
         setCurrentImage(`${src}?t=${new Date().getTime()}`)
     }
+
     return (
         <Modal 
             title="이미지 수정"

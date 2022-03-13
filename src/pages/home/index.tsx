@@ -37,7 +37,6 @@ export function Home(){
     const [subjectsList, setSubjectsList] = useRecoilState(subjectsListState)
     const [currentSubject, setSubject] = useRecoilState(currentSubjectState)
     const getUnitInfo = useGetunit()
-    const navigate = useNavigate()
     
     // subject 목록 받아오기
     useEffect(() => {

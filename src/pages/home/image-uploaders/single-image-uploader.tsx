@@ -2,7 +2,6 @@ import { Modal, ModalProps, Upload } from "antd"
 import { Box, Text } from "materials";
 import { IoAdd } from "react-icons/io5";
 import { useUploadFiles } from "./hooks";
-import { UploadButton } from "./upload-button";
 
 export interface SingleImageUploaderProps extends ModalProps {
     targetFilename: string

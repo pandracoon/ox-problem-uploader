@@ -96,7 +96,7 @@ export function PNGUpload(){
                 const {alias, ...examInfo} = exam
 
                 // filename은 table row의 key로도 사용됨
-                const filename = `${year}_${alias.split(' ').join('_')}_${currentSubject.name}_no${index}`
+                const filename = `${year}/${alias.split(' ').join('_')}_${currentSubject.name}_no${index}`
 
                 if(useImage){
                     const {url:base64} = await getCroppedImg(photo)
