@@ -116,7 +116,7 @@ export function PNGUpload(){
                         addImageUrlMap(filename_forChoice, url)
 
                         return {
-                            filename, 
+                            filename:filename_forChoice, 
                             ...rest
                         }
                     })
