@@ -1,6 +1,6 @@
-import { Modal } from "antd"
+import { Image, Modal } from "antd"
 import { s3EditFile } from "api/s3/\bs3editFile"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import ReactCrop, { Crop } from "react-image-crop"
 
 interface ImageEditModalProps {
@@ -10,6 +10,7 @@ interface ImageEditModalProps {
     src: string
 }
 export const ImageEditModal = ({visible, setVisible, setCurrentImage, src}:ImageEditModalProps) => {
+    const source = useMemo(() => src+`?timestamp=${new Date().getTime()}`, [src])
     const [crop, _setCrop] = useState<Crop>({
         unit: "%",
         x: 0,
@@ -22,6 +23,7 @@ export const ImageEditModal = ({visible, setVisible, setCurrentImage, src}:Image
 
     const close = () => setVisible(false)
     const onCrop = async () => {
+        console.log(image)
         if(!image)
             return;
 
@@ -38,7 +40,8 @@ export const ImageEditModal = ({visible, setVisible, setCurrentImage, src}:Image
             onOk={onCrop}
         >
             <ReactCrop 
-                src={src} 
+                crossorigin="anonymous"
+                src={source} 
                 crop={crop}
                 onImageLoaded={setImage}
                 onChange={_setCrop} 
