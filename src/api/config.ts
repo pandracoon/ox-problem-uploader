@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosInstance } from "axios";
 
-const HOST = process.env.REACT_APP_BACKEND_URL
+const HOST = "https://api.oxcreator.tk"
+// const HOST = process.env.REACT_APP_BACKEND_URL
 
 export const requestAPI = (): AxiosInstance => {
   const configs: AxiosRequestConfig = {

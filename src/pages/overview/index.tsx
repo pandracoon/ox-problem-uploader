@@ -1,4 +1,4 @@
-import { Image } from "antd"
+import { Image, Tag } from "antd"
 import { getSourceProblems } from "api/get-source-problems"
 import { ProblemCountBySourceProps, ProblemCountBySubjectProps } from "interfaces/problem-count.interface"
 import { IProblem } from "interfaces/problem-interface"
@@ -6,6 +6,7 @@ import { sourceToAlias } from "interfaces/source.interface"
 import { Box, Text } from "materials"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
+import { ChoiceView } from "./ChoiceView"
 import { ProblemTag } from "./ProblemTag"
 import { SubjectSourceMenu } from "./SubjectSourceMenu"
 
@@ -26,6 +27,8 @@ export function Overview(){
     const [problems, setProblems] =  useState<IProblem[]>([])
     // 현재 보고 있는 문제
     const [viewProblem, setViewProblem] = useState<IProblem | null>(null)
+
+    const [currentChoiceIndex, setCurrentChoiceIndex] = useState<string | null>(null)
     
     const onSelectSource = (subject: ProblemCountBySubjectProps, source: ProblemCountBySourceProps) => {
         setCurrentSubject(subject)
@@ -38,7 +41,15 @@ export function Overview(){
                 .then(res => setProblems(res.data))
 
     }, [currentSource?.id, currentSubject?.code])
+    
+    useEffect(() => {
+        if(!viewProblem)
+            return;
+        setCurrentChoiceIndex(viewProblem.choices[0].index)
 
+    },[viewProblem?.id])
+
+    console.log(viewProblem)
     
     
     return (
@@ -81,21 +92,21 @@ export function Overview(){
 
                 {/* 문제 상세 보기 */}
                 <Box flex={1} flexDirection="column" marginRight={24}>
-                    {viewProblem && (
-                        <>
-                        <Text 
-                            content={`${viewProblem.number}. ${viewProblem.description}`} 
-                            marginBottom={12} 
+                    <Box flexDirection="row">
+                        {viewProblem?.choices.sort((a,b) => (a.index > b.index ? 1 : -1)).map(({index}) => (
+                            <Tag
+                                color={currentChoiceIndex === index ? "lime" : "default"}
+                                onClick={() => setCurrentChoiceIndex(index)}
+                                key={index}
+                                children={index}
+                            />
+                        ))}
+                    </Box>
+                    {viewProblem && currentChoiceIndex && (
+                        <ChoiceView 
+                            problem={viewProblem}
+                            choiceIndex={currentChoiceIndex}
                         />
-                        <Image 
-                            src={viewProblem.image}
-                            width={400}
-                        />
-                        <Text 
-                            content={`${viewProblem.solution}`} 
-                            marginVertical={12} 
-                        />
-                        </>
                     )}
                 </Box>
             </Box>
