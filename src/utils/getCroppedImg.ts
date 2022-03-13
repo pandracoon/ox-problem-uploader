@@ -1,4 +1,5 @@
 import { IPhoto } from 'interfaces/photo.interface';
+import { Crop, PixelCrop } from 'react-image-crop';
 
 interface CroppedImg {
     url: string
@@ -13,6 +14,7 @@ export function getCroppedImg({url, width, height, crop}:IPhoto):Promise<Cropped
 
     const image = new Image()
     image.src = url;
+    // image.crossOrigin = 'Anonymous'
     const canvas = document.createElement("canvas"); // document 상에 canvas 태그 생성
     // 캔버스 영역을 크롭한 이미지 크기 만큼 조절
     canvas.width = WIDTH;

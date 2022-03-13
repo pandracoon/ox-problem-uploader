@@ -49,8 +49,6 @@ export function Overview(){
 
     },[viewProblem?.id])
 
-    console.log(viewProblem)
-    
     
     return (
         <Wrapper>
