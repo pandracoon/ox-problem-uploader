@@ -42,7 +42,6 @@ export const ImageEditModal = ({visible, setVisible, setCurrentImage, src}:Image
                 crop={crop}
                 onImageLoaded={setImage}
                 onChange={_setCrop} 
-                crossorigin='anonymous'
             />
 
         </Modal>
