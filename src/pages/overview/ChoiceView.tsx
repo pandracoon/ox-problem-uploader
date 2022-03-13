@@ -34,7 +34,6 @@ export const ChoiceView = ({problem, choiceIndex}:ChoiceViewProps) => {
             <AntdImage 
                 src={currentImage}
                 width={400}
-                crossOrigin='anonymous'
             />
             <Button color="ghost" style={{marginTop: 16}} onClick={open}>
                 이미지 수정
