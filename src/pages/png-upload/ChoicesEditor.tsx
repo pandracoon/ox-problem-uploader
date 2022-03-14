@@ -108,6 +108,23 @@ export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
                         </Select>
                     </Box>
 
+                    {/* 선지 설명 */}
+                    <Box marginTop={12} alignItems="center">
+                        <Input.TextArea
+                            placeholder="자료 설명"
+                            value={description}
+                            onChange={setDescription(index)}
+                        />
+                        <Button 
+                            style={{marginLeft: 10}} 
+                            onClick={openPhotoModal(index)} 
+                            type={photo ? "default" : "primary"}
+                            disabled={!useImage}
+                        >
+                            선지 상세 이미지 {photo ? "수정" : "추가"}
+                        </Button>
+
+                    </Box>
 
                     {/* 문제(선지 내용) */}
                     <Box alignItems="center" marginTop={12}>
@@ -131,30 +148,13 @@ export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
                         />
                     </Box>
                     
-                    <Box marginTop={8}>
+                    <Box marginTop={12}>
                         <Input.TextArea
                             placeholder="정답 해설"
                             autoSize={{ minRows: 2, maxRows: 2 }}
                             value={solution}
                             onChange={setSolution(index)}
                         />
-                    </Box>
-
-                    <Box marginTop={8} alignItems="center">
-                        <Input
-                            placeholder="선지별 이미지 설명(빈칸으로 두면 문제와 동일)"
-                            value={description}
-                            onChange={setDescription(index)}
-                        />
-                        <Button 
-                            style={{marginLeft: 10}} 
-                            onClick={openPhotoModal(index)} 
-                            type={photo ? "default" : "primary"}
-                            disabled={!useImage}
-                        >
-                            선지 상세 이미지 {photo ? "수정" : "추가"}
-                        </Button>
-
                     </Box>
 
                 </Box>

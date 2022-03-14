@@ -244,7 +244,7 @@ export const useSetChoices = () => {
         }
         
         const setDescription = (choice_index: string) =>
-             ({target:{value}}: ChangeEvent<HTMLInputElement>) => 
+             ({target:{value}}: ChangeEvent<HTMLTextAreaElement>) => 
                 _setChoices(problem_index, choice_index, {description: value})
 
         const setUnitinfo = (choice_index: string) => (unit_index: number) => {
