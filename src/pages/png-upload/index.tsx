@@ -39,6 +39,7 @@ export function PNGUpload(){
     const year_now = useMemo(() => new Date().getFullYear()+1, [])
     const [year, setYear] = useLocalStorage<number>('current/selected/year', 0)
     const [exam, setExam] = useLocalStorage<IExam>('current/selected/exam',exams[0])
+
     
     const [subjectsList, setSubjectsList] = useRecoilState(subjectsListState)
     const [currentSubject, setSubject] = useRecoilState(currentSubjectState)
@@ -63,7 +64,6 @@ export function PNGUpload(){
     const selectSubject = (code: string) => {
         getChaptersApi(code)
             .then(res =>{
-                console.log(res.data)
                 setSubject(res.data)
             })
     }
@@ -188,7 +188,7 @@ export function PNGUpload(){
                     <Box flexDirection="column" marginLeft={12}>
                         <Text type="P1" align="center" content="시험 종류" marginBottom={5} />
                         <Select 
-                            defaultValue={exam.alias}
+                            value={exam.alias}
                             onChange={selectExam}
                             style={{width: 200}}
                         >
@@ -200,7 +200,7 @@ export function PNGUpload(){
                     <Box flexDirection="column" marginLeft={12}>
                         <Text type="P1" align="center" content="과목" marginBottom={5} />
                         <Select 
-                            defaultValue={currentSubject.code} 
+                            value={currentSubject.code} 
                             style={{ width: 120 }} 
                             onChange={selectSubject}>
                             {subjectsList.map((s) => (
@@ -228,6 +228,12 @@ export function PNGUpload(){
             </GridBox>
 
             <PNGUploadModal
+                year={year}
+                setYear={setYear}
+                exam={exam}
+                selectExam={selectExam}
+                selectSubject={selectSubject}
+
                 visible={uploadModalVisible}    
                 onCancel={cancelUploadModal}
             />

@@ -1,11 +1,13 @@
-import { Button, Image, InputNumber } from "antd"
+import { Button, Image, InputNumber, Select } from "antd"
 import Modal from "antd/lib/modal/Modal";
+import { currentSubjectState, subjectsListState } from "atoms";
 import { examPNGProblemsState } from "atoms/pngPhotos";
 import { EXAM_ROUTINES } from "data/exam-routines";
+import { exams, IExam } from "data/exams";
 import { PNGUploadProblemFeature } from "interfaces/png-upload-problem-feature.interface";
 import { Box, ImageAsURLReader, ReadImageProps, Text } from "materials"
-import { useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useMemo, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
 
@@ -49,9 +51,24 @@ const FormSelectButton = styled.button<{selected: boolean}>`
 interface PNGUploadModalProps {
     visible: boolean
     onCancel: () => void
+
+    // 연도, 시험 선택용
+    year: number
+    setYear: (y:number) => void
+    exam: IExam
+    selectSubject: (code: string) => void
+    selectExam: (alias: string) => void
 }
-export const PNGUploadModal = ({visible, onCancel}:PNGUploadModalProps) => {
+export const PNGUploadModal = ({visible, onCancel,
+    year, setYear, exam, selectExam, selectSubject}:PNGUploadModalProps) => {
+    // 연도, 시험 선택용
     const setProblems = useSetRecoilState(examPNGProblemsState)
+    const year_now = useMemo(() => new Date().getFullYear()+1, [])
+    const currentSubject = useRecoilValue(currentSubjectState)
+    const subjectsList = useRecoilValue(subjectsListState)
+
+    ////////////////////////////////////////////////////////////////////////
+
 
     // 시험지 파일 업로드 관련
     const [fileProps, setFileProps] = useState<ReadImageProps>({url: "", width: 0, height: 0})
@@ -64,6 +81,7 @@ export const PNGUploadModal = ({visible, onCancel}:PNGUploadModalProps) => {
     const select = (num: number) => () => setSelected(num)
 
     const [imageModalVisible, setImageModalVisible] = useState<boolean>(false)
+
 
     const onOk = () => {
         if(!fileProps.url){
@@ -120,6 +138,46 @@ export const PNGUploadModal = ({visible, onCancel}:PNGUploadModalProps) => {
         >
 
             <Box flexDirection="column">
+                {/* 연도, 과목 선택 */}
+                {/* 홈에 있는 것과 중복 */}
+                <Box marginBottom={15}>
+                    <Box flexDirection="column">
+                        <Text type="P1" align="center" content="연도" marginBottom={5} />
+                        <InputNumber 
+                            max={year_now} 
+                            placeholder={""+year_now} 
+                            value={year}  
+                            onChange={setYear}
+                        />
+                    </Box>
+                    <Box flexDirection="column" marginLeft={12}>
+                        <Text type="P1" align="center" content="시험 종류" marginBottom={5} />
+                        <Select 
+                            value={exam.alias}
+                            onChange={selectExam}
+                            style={{width: 200}}
+                        >
+                            {exams.map((ex) => (
+                                <Select.Option value={ex.alias} children={ex.alias} key={ex.alias} />
+                            ))}
+                        </Select>
+                    </Box>
+                    <Box flexDirection="column" marginLeft={12}>
+                        <Text type="P1" align="center" content="과목" marginBottom={5} />
+                        <Select 
+                            value={currentSubject.code} 
+                            style={{ width: 120 }} 
+                            onChange={selectSubject}>
+                            {subjectsList.map((s) => (
+                                <Select.Option value={s.code} children={s.name} key={s.code} />
+                            ))}
+                        </Select>
+                    </Box>
+                </Box>
+                {/* //////////////////////////////////////////////////////////////// */}
+                {/* //////////////////////////////////////////////////////////////// */}
+                {/* //////////////////////////////////////////////////////////////// */}
+                
                 {fileProps.url ? 
                     <Box marginBottom={12} justifyContent="space-between">
                         <Text type="P1" content="1. 이미지 선택 완료" color="#0969c8" marginBottom={12}/>
