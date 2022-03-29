@@ -110,10 +110,10 @@ export function Home(){
 
         const uploadedProblems:CreateProblemInput[] = problems.map(
             ({key, filename, choices, ...problem}) => {
-                const choices_with_unitId:IChoice[] = choices.map(({unit, ...rest}) => {
+                const choices_with_unitId:IChoice[] = choices.map(({unit, filename:choice_filename ,...rest}) => {
                     if(!unit.info)
                         throw Error()
-                    const image = imageUrls.find(item => item.name === filename)?.url
+                    const image = imageUrls.find(item => item.name === choice_filename)?.url
                     const { unitId } = unit.info
                     return {
                         unitId, 
