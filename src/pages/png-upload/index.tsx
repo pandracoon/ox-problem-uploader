@@ -137,7 +137,6 @@ export function PNGUpload(){
             })
         )
 
-        console.log(result_problems)
         // 문제 추가
         appendProblems(result_problems)
         resetProblems()
