@@ -158,8 +158,8 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                 {/* 자주 사용되는 글자들 */}
                 <Text type="D1" content="☆ 자주 사용하는 문자" marginBottom={6} /> 
                 <Text type="P1" content="㉠ ㉡ ㉢ ㉣ ㉤ ⓐ ⓑ ⓒ ⓓ ⍺ β θ ⍴ 𝒙 𝒚 𝒛" marginBottom={8} /> 
-                <Text type="P1" content="$/ce{}$" marginBottom={8}/> 
-                <Text type="P1" content="$/frac{}{}$" marginBottom={8} /> 
+                <Text type="P1" content="화학식  $/ce{}$" marginBottom={8}/> 
+                <Text type="P1" content="분수  $/frac{}{}$" marginBottom={8} /> 
             </Box>
             
             <Box flexDirection="column" flex={1}>
