@@ -1,11 +1,10 @@
-import { Button, Divider, Input, Select, Switch, Tag } from "antd"
-import Modal from "antd/lib/modal/Modal"
+import { Divider, Input, Select, Switch, Tag } from "antd"
 import { useGetUnitListofCurrentSubject } from "atoms"
 import { examPNGProblemsState, useSetChoices } from "atoms/pngPhotos"
 import { IPhoto } from "interfaces/photo.interface"
 import { Box, Text } from "materials"
 import { Fragment, useEffect, useState } from "react"
-import ReactCrop, { Crop } from "react-image-crop"
+import { Crop } from "react-image-crop"
 import { useRecoilValue } from "recoil"
 import { getCroppedImg } from "utils/getCroppedImg"
 
@@ -21,66 +20,70 @@ export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
         setQuestion,
         setAnswer,
         setSolution,
-        setPhoto,
+        // setPhoto,
         setDescription,
         setUnitinfo
     } = getSetter(problem_index)
 
     const units = useGetUnitListofCurrentSubject()
 
-    const [tempPhoto, setTempPhoto] = useState<IPhoto>(photo)
+    // @TODO: 전체 Remove
+    // const [tempPhoto, setTempPhoto] = useState<IPhoto>(photo)
     // modal을 open하면 현재 선택된 이미지를 전체 이미지로 설정, 그 안에서 crop하도록
-    useEffect(() => {
-        getCroppedImg(photo)
-            .then((res) =>
-                 setTempPhoto({
-                    ...res, 
-                    crop: {
-                        unit: "%", 
-                        x:0,
-                        y:0,
-                        width: 100,
-                        height: 100
-                    }
-                })
-            )
-    },[photo])
+    // useEffect(() => {
+    //     getCroppedImg(photo)
+    //         .then((res) =>
+    //              setTempPhoto({
+    //                 ...res, 
+    //                 crop: {
+    //                     unit: "%", 
+    //                     x:0,
+    //                     y:0,
+    //                     width: 100,
+    //                     height: 100
+    //                 }
+    //             })
+    //         )
+    // },[photo])
+
     // modal에서 crop onChange하는 경우
-    const onCropChange = (_:Crop, crop: Crop) => {
-        setTempPhoto(prev => ({...prev, crop}))
-    }
+    // const onCropChange = (_:Crop, crop: Crop) => {
+    //     setTempPhoto(prev => ({...prev, crop}))
+    // }
 
     // for 세부 이미지
-    const [targetChoiceIndex, setTargetChoiceIndex] = useState<string | null>(null)
-    const [photoModalVisible, setPhotoModalVisible] = useState<boolean>(false)
-    const openPhotoModal = (choice_index: string) => () => {
-        // target 선지 설정
-        setTargetChoiceIndex(choice_index)
-        setPhotoModalVisible(true)
-    }
-    const cancelPhotoModal = () => {
-        // target 선지 초기화
-        setTargetChoiceIndex(null)
-        setPhotoModalVisible(false)
-    }
+    // const [targetChoiceIndex, setTargetChoiceIndex] = useState<string | null>(null)
+    // const [photoModalVisible, setPhotoModalVisible] = useState<boolean>(false)
     
-    const okPhotoModal = () => {
-        if(!targetChoiceIndex)
-            return;
-        // 전역 변수에  반영
-        setPhoto(targetChoiceIndex, tempPhoto)
-        setTargetChoiceIndex(null)
-        setPhotoModalVisible(false)
-    }
+    // @TODO: REMOVE
+    // const openPhotoModal = (choice_index: string) => () => {
+    //     // target 선지 설정
+    //     setTargetChoiceIndex(choice_index)
+    //     setPhotoModalVisible(true)
+    // }
+    // const cancelPhotoModal = () => {
+    //     // target 선지 초기화
+    //     setTargetChoiceIndex(null)
+    //     setPhotoModalVisible(false)
+    // }
+    
+    // const okPhotoModal = () => {
+    //     if(!targetChoiceIndex)
+    //         return;
+    //     // 전역 변수에  반영
+    //     setPhoto(targetChoiceIndex, tempPhoto)
+    //     setTargetChoiceIndex(null)
+    //     setPhotoModalVisible(false)
+    // }
 
-    const removePhoto = () => {
-        if(!targetChoiceIndex)
-            return;
-        // 전역 변수에  반영
-        setPhoto(targetChoiceIndex, undefined)
-        setTargetChoiceIndex(null)
-        setPhotoModalVisible(false)
-    }
+    // const removePhoto = () => {
+    //     if(!targetChoiceIndex)
+    //         return;
+    //     // 전역 변수에  반영
+    //     setPhoto(targetChoiceIndex, undefined)
+    //     setTargetChoiceIndex(null)
+    //     setPhotoModalVisible(false)
+    // }
     
 
     return (
@@ -115,14 +118,15 @@ export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
                             value={description}
                             onChange={setDescription(index)}
                         />
-                        <Button 
+                        {/* @TODO: Remove */}
+                        {/* <Button 
                             style={{marginLeft: 10}} 
                             onClick={openPhotoModal(index)} 
                             type={photo ? "default" : "primary"}
                             disabled={!useImage}
                         >
                             선지 상세 이미지 {photo ? "수정" : "추가"}
-                        </Button>
+                        </Button> */}
 
                     </Box>
 
@@ -158,7 +162,9 @@ export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
                     </Box>
 
                 </Box>
-                <Modal 
+
+                {/* @TODO:: Remove */}
+                {/* <Modal 
                     visible={photoModalVisible} 
                     title={`선지 ${index}번 그림`} 
                     onCancel={cancelPhotoModal} 
@@ -172,7 +178,7 @@ export const ChoicesEditor = ({index:problem_index}:ChoicesEditorProps) => {
                             </Button>
                         </Box>
                     )}
-                </Modal>
+                </Modal> */}
                 <Divider key={"divider"+i}  />
                 </Fragment>
             ))}

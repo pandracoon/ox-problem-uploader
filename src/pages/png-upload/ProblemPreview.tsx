@@ -1,6 +1,6 @@
 import { Button, Divider, Input, InputNumber, Switch } from "antd"
 import { currentSubjectState } from "atoms"
-import { examPNGProblemsState, useRemoveProblem, useResetChoicesIndex, useSetProblem, useSetUseImage } from "atoms/pngPhotos"
+import { examPNGProblemsState, useRemoveProblem, useResetChoicesIndex, useSetProblem } from "atoms/pngPhotos"
 import { ISource } from "interfaces/source.interface"
 import { Box, Text } from "materials"
 import { ChangeEvent, useCallback, useEffect, useState } from "react"
@@ -34,8 +34,10 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
     const _removeProblem = useRemoveProblem()
     const onRemove = useCallback(() =>  _removeProblem(index),[index])
     
-    const _setUseImage = useSetUseImage()
-    const onChangeUseImage = useCallback((useImage: boolean) => _setUseImage(index, useImage), [index])
+
+    // @TODO:: Remove
+    // const _setUseImage = useSetUseImage()
+    // const onChangeUseImage = useCallback((useImage: boolean) => _setUseImage(index, useImage), [index])
 
     // 선지 종류
     const [isKor, setIsKor] = useState<boolean>(true)
@@ -80,7 +82,8 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
 
                 <Box alignItems="center" justifyContent="space-between">
                     {/* 선지 종류(한글/숫자) 설정 */}
-                    <Box alignItems="center">
+                    {/* @TODO:: Remove */}
+                    {/* <Box alignItems="center">
                         <Text type="P1" content="이미지 사용" marginRight={5} marginBottom={4} />
                         <Switch 
                             checkedChildren="on" 
@@ -88,7 +91,7 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                             checked={useImage}
                             onChange={onChangeUseImage}
                         />
-                    </Box>
+                    </Box> */}
 
                     {/* 정답률 */}
                     <Box alignItems="center">
@@ -153,10 +156,10 @@ export const ProblemPreview = ({index, source:{year, alias}}:ProblemPreviewProps
                 </Box>
 
                 {/* 자주 사용되는 글자들 */}
-                <Text type="D1" content="☆ 자주 사용하는 문자" marginBottom={4} /> 
-                <Text type="P1" content="㉠ ㉡ ㉢ ㉣ ㉤ ⓐ ⓑ ⓒ ⓓ ⍺ β θ ⍴ 𝒙 𝒚 𝒛" marginBottom={4} /> 
-               
-
+                <Text type="D1" content="☆ 자주 사용하는 문자" marginBottom={6} /> 
+                <Text type="P1" content="㉠ ㉡ ㉢ ㉣ ㉤ ⓐ ⓑ ⓒ ⓓ ⍺ β θ ⍴ 𝒙 𝒚 𝒛" marginBottom={8} /> 
+                <Text type="P1" content="$/ce{}$" marginBottom={8}/> 
+                <Text type="P1" content="$/frac{}{}$" marginBottom={8} /> 
             </Box>
             
             <Box flexDirection="column" flex={1}>

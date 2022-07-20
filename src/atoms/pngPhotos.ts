@@ -5,7 +5,6 @@ import produce from "immer";
 import { EXAM_ROUTINES } from "data/exam-routines";
 import { PNGUploadChoice, PNGUploadProblemFeature } from "interfaces/png-upload-problem-feature.interface";
 import { useGetunit } from "./subject";
-import { IPhoto } from "interfaces/photo.interface";
 import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist()
@@ -45,6 +44,7 @@ export const useReadImages = () => {
                     const problems:PNGUploadProblemFeature[] = 
                         routine.map((crop_props, idx) => ({
                             index: startIndex+idx,
+                            // @TODO:: Remove
                             useImage: true,
                             photo: {
                                 url,
@@ -84,18 +84,18 @@ export const useRemoveProblem = () => {
 }
 
 
-
-export const useSetUseImage = () => {
-    const setProblem = useSetRecoilState(examPNGProblemsState)
-    const setUseImage = (index: number, useImage: boolean) => {
-        setProblem(
-            produce(draft => {
-                draft[index].useImage = useImage
-            })
-        )
-    }
-    return setUseImage
-}
+// @TODO:: Remove
+// export const useSetUseImage = () => {
+//     const setProblem = useSetRecoilState(examPNGProblemsState)
+//     const setUseImage = (index: number, useImage: boolean) => {
+//         setProblem(
+//             produce(draft => {
+//                 draft[index].useImage = useImage
+//             })
+//         )
+//     }
+//     return setUseImage
+// }
 
 
 export const useSetCrop = () => {
@@ -156,7 +156,7 @@ export const useResetChoicesIndex = () => {
                     .map((_, i) => ({
                         index: isKor ? KOR[i] : i+1+"",
                         question: "",
-                        answer: true,
+                        answer: false,
                         solution: "",
                         description: "",
                         unit: {
@@ -190,7 +190,7 @@ export const useResetChoicesIndex = () => {
                 draft[problem_index].choices.push({
                     index: isKor ? KOR[countChoices] : countChoices+1+"",
                     question: "",
-                    answer: true,
+                    answer: false,
                     solution: "",
                     description: "",
                     unit: {
@@ -239,9 +239,10 @@ export const useSetChoices = () => {
                 _setChoices(problem_index, choice_index, {solution: value})
         
         
-        const setPhoto = (choice_index: string, photo:IPhoto | undefined) =>  {
-            _setChoices(problem_index, choice_index, {photo})
-        }
+        // @TODO: REMOVE
+        // const setPhoto = (choice_index: string, photo:IPhoto | undefined) =>  {
+        //     _setChoices(problem_index, choice_index, {photo})
+        // }
         
         const setDescription = (choice_index: string) =>
              ({target:{value}}: ChangeEvent<HTMLTextAreaElement>) => 
@@ -256,7 +257,7 @@ export const useSetChoices = () => {
             setQuestion,
             setAnswer,
             setSolution,
-            setPhoto,
+            // setPhoto,
             setDescription,
             setUnitinfo
         }
