@@ -1,12 +1,9 @@
 import { Divider, Input, Select, Switch, Tag } from "antd"
 import { useGetUnitListofCurrentSubject } from "atoms"
 import { examPNGProblemsState, useSetChoices } from "atoms/pngPhotos"
-import { IPhoto } from "interfaces/photo.interface"
 import { Box, Text } from "materials"
-import { Fragment, useEffect, useState } from "react"
-import { Crop } from "react-image-crop"
+import { Fragment } from "react"
 import { useRecoilValue } from "recoil"
-import { getCroppedImg } from "utils/getCroppedImg"
 
 interface ChoicesEditorProps {
     index: number
