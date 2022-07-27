@@ -15,7 +15,6 @@ import { getChaptersApi } from "api/get-chapters.api"
 import { createProblemsApi } from "api/create-problems.api"
 import { CreateProblemInput, IChoice } from "interfaces/create-problem.interface"
 import produce from "immer"
-import { useNavigate } from "react-router-dom"
 
 
 const { Option } = Select;

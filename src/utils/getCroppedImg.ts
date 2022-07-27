@@ -1,5 +1,4 @@
 import { IPhoto } from 'interfaces/photo.interface';
-import { Crop, PixelCrop } from 'react-image-crop';
 
 interface CroppedImg {
     url: string

@@ -1,4 +1,4 @@
-import { Image, Modal } from "antd"
+import { Modal } from "antd"
 import { s3EditFile } from "api/s3/\bs3editFile"
 import { useMemo, useState } from "react"
 import ReactCrop, { Crop } from "react-image-crop"
